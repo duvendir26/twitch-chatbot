@@ -1,4 +1,5 @@
 import os
+import asyncio
 import logging
 
 from dotenv import load_dotenv
@@ -28,10 +29,8 @@ class TwitchBot(commands.Bot):
             initial_channels=channels
         )
 
-
     async def event_ready(self):
         print(f"Connected as {self.nick}")
-
 
     async def event_message(self, message):
         if message.echo:
@@ -45,6 +44,22 @@ class TwitchBot(commands.Bot):
         )
 
 
+async def main():
+    while True:
+        bot = TwitchBot()
+
+        try:
+            await bot.start()
+        except Exception:
+            logging.exception("Twitch connection lost. Reconnecting in 10 seconds...")
+        finally:
+            try:
+                await bot.close()
+            except Exception:
+                pass
+
+        await asyncio.sleep(10)
+
+
 if __name__ == "__main__":
-    bot = TwitchBot()
-    bot.run()
+    asyncio.run(main())
