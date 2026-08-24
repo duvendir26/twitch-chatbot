@@ -10,7 +10,7 @@ GAIN_CHANCE = 0.8
 LOSE_CHANCE = 0.2
 
 COOLDOWN_TIME = 15 * 60
-COOLDOWN_IMMUNITY = ["the_kekbot"]
+COOLDOWN_IMMUNITY = ["the_kekbot"] #? FOR TESTING
 
 messagesZero = [
     "You found no keks today. Better luck tomorrow KEKBye",

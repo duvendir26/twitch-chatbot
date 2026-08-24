@@ -32,7 +32,7 @@ def get_user(username):
     for user in users:
         if user["username"] == username:
             return user
-
+        
     add_user(username)
 
     return get_user(username)
