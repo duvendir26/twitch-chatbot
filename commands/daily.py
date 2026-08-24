@@ -1,7 +1,7 @@
 import random
 
 from time import time
-from utils.users import get_user, set_user
+from utils.users import get_user, load_users, set_user
 
 DAILY_MIN = 1
 DAILY_MAX = 30
@@ -25,7 +25,7 @@ messagesGain = [
 ]
 
 messagesLose = [
-    "You gave your keks to a stranger KEKP Love",
+    "You gave your keks to {random_user} KEKP Love",
     "You were abducted by aliens and they took your keks AlienPls KEK7",
     "You donated your keks to charity KEKP Love",
 ]
@@ -51,19 +51,39 @@ async def cmd_daily(username, reply, args=None):
     
     amount = random.randint(DAILY_MIN, DAILY_MAX)
     roll = random.random()
-
-    if roll == 0.05:
+      
+    if roll < 0.05:
         await reply(
             f"@{username} {random.choice(messagesZero)} | Change: +0 🍪 | Balance: {user['balance']} 🍪"
         )
-    elif roll < GAIN_CHANCE and not roll == 0.05:
+    elif roll < GAIN_CHANCE:
         await reply(
             f"@{username} {random.choice(messagesGain)} | Change: +{amount} 🍪 | Balance: {user['balance'] + amount} 🍪"
         )
     else:
-        await reply(
-            f"@{username} {random.choice(messagesLose)} | Change: -{amount} 🍪 | Balance: {user['balance'] - amount} 🍪"
-        )
+        message = random.choice(messagesLose)
+        random_user = None
+        if message == messagesLose[0]:
+            users = load_users()
+            
+            #? We have to prevent user from targeting themself
+            users = [
+                u for u in users
+                if u["username"].lower() != username.lower()
+            ]
+            
+            random_user = random.choice(users)
+            random_user["balance"] += amount
+            set_user(random_user["username"], random_user)
+            
+            await reply(
+                f"@{username} {message.format(random_user=random_user['username'])} | Change: -{amount} 🍪 | Balance: {user['balance'] - amount} 🍪"
+            )
+        else:
+            await reply(
+                f"@{username} {message} | Change: -{amount} 🍪 | Balance: {user['balance'] - amount} 🍪"
+            )
+        
         
     if roll < GAIN_CHANCE:
         user["balance"] += amount
