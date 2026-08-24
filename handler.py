@@ -1,4 +1,4 @@
-from commands.daily import cmd_daily
+from commands.bonus import cmd_bonus
 from commands.coinflip import cmd_coinflip
 from commands.leaderboard import cmd_leaderboard
 from commands.bottom import cmd_bottom
@@ -8,8 +8,8 @@ from commands.commandList import cmd_command_list
 from config import COMMAND_PREFIX
 
 COMMANDS = {
-    "kek": cmd_daily,
-    "daily": cmd_daily, #? ALIAS
+    "kek": cmd_bonus,
+    "daily": cmd_bonus, #? ALIAS
     "coinflip": cmd_coinflip,
     "leaderboard": cmd_leaderboard,
     "stats": cmd_stats,

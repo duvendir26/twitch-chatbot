@@ -1,7 +1,7 @@
 import time
 
 from utils.users import get_user
-from commands.daily import COOLDOWN_TIME
+from commands.bonus import COOLDOWN_TIME
 
 async def cmd_stats(username, reply, args=None):
     print(f"@{username} requested stats command with args: {args}")
@@ -18,13 +18,13 @@ async def cmd_stats(username, reply, args=None):
         if user['coinflip_biggest_loss'] != 0 else ""
     )
     
-    remaining = user["last_daily"] + COOLDOWN_TIME - time.time()
+    remaining = user["bonus_timer"] + COOLDOWN_TIME - time.time()
     if remaining > 0:
         minutes = int(remaining // 60)
         seconds = int(remaining % 60)
-        last_daily = f"Daily Cooldown: {minutes}m {seconds}s"
+        bonus_timer = f"Bonus cooldown: {minutes}m {seconds}s"
     else:
-        last_daily = "Daily not claimed ($kek)"
+        bonus_timer = "Bonus not claimed ($kek)"
 
     stats_message = (
         f"@{username} Stats: "
@@ -37,7 +37,7 @@ async def cmd_stats(username, reply, args=None):
         f"{biggest_win}"
         f"{biggest_loss}"
         f"Win Rate: {user['coinflip_wins'] / (user['coinflip_wins'] + user['coinflip_losses']) * 100 if (user['coinflip_wins'] + user['coinflip_losses']) > 0 else 0:.2f}% | "
-        f"{last_daily}"
+        f"{bonus_timer}"
     )
 
     await reply(stats_message)

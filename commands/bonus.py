@@ -36,16 +36,16 @@ messagesTime = [
     "You have already collected your keks KEKScreen",
 ]
 
-async def cmd_daily(username, reply, args=None):
+async def cmd_bonus(username, reply, args=None):
     print(f"@{username} requested daily command with args: {args}")
     #!---------------------------------------------------------------------------------------
     
     user = get_user(username)
-    last_daily = int(user["last_daily"])
+    bonus_timer = int(user["bonus_timer"])
     
-    minutes = int((last_daily + COOLDOWN_TIME - time()) / 60)
-    seconds = int((last_daily + COOLDOWN_TIME - time()) % 60)
-    if username not in COOLDOWN_IMMUNITY and last_daily + COOLDOWN_TIME > time():
+    minutes = int((bonus_timer + COOLDOWN_TIME - time()) / 60)
+    seconds = int((bonus_timer + COOLDOWN_TIME - time()) % 60)
+    if username not in COOLDOWN_IMMUNITY and bonus_timer + COOLDOWN_TIME > time():
         await reply(f"@{username} {random.choice(messagesTime)} | Balance: {user['balance']} 🍪 | Cooldown: {minutes}m {seconds}s")
         return
     
@@ -90,5 +90,5 @@ async def cmd_daily(username, reply, args=None):
     else:
         user["balance"] -= amount
         
-    user["last_daily"] = int(time())
+    user["bonus_timer"] = int(time())
     set_user(username, user)
