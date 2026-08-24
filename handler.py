@@ -4,6 +4,7 @@ COMMAND_PREFIX = "$"
 
 COMMANDS = {
     "kek": cmd_daily,
+    "daily": cmd_daily #? ALIAS
 }
 
 

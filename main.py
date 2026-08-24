@@ -15,7 +15,6 @@ logging.basicConfig(
 
 
 class TwitchBot(commands.Bot):
-
     def __init__(self):
         super().__init__(
             token=os.getenv("TWITCH_TOKEN"),
