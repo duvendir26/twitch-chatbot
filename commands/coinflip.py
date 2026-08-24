@@ -25,11 +25,8 @@ async def cmd_coinflip(username, reply, args=None):
         return
 
     user = get_user(username)
-
-    # Get bet amount
     if args[1].lower() == "all":
         amount = user["balance"]
-
     else:
         try:
             amount = int(args[1])
@@ -39,7 +36,6 @@ async def cmd_coinflip(username, reply, args=None):
             )
             return
 
-    # Validate bet
     if amount <= 0:
         await reply(
             f"@{username} You cannot bet 0 or a negative amount 🍪"
@@ -52,9 +48,7 @@ async def cmd_coinflip(username, reply, args=None):
         )
         return
 
-    # Flip coin
     result = random.choice(["heads", "tails"])
-
     if result == side:
         user["balance"] += amount
         result_text = f"+{amount}"
@@ -64,7 +58,6 @@ async def cmd_coinflip(username, reply, args=None):
         result_text = f"-{amount}"
         emote = "KEKScreen"
 
-    # Save the entire user
     set_user(username, user)
 
     await reply(
