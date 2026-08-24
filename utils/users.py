@@ -22,12 +22,15 @@ def add_user(username):
             "hp": 100,
             "armor": 0,
             "strength": 1,
+            "duel_wins": 0,
+            "duel_losses": 0,
             "balance": 0,
             "coinflip_wins": 0,
             "coinflip_losses": 0,
             "coinflip_biggest_win": 0,
             "coinflip_biggest_loss": 0,
-            "bonus_timer": 0
+            "bonus_timer": 0,
+            "total_claimed": 0
         })
 
         save_users(users)

@@ -87,6 +87,7 @@ async def cmd_bonus(username, reply, args=None):
         
     if roll < GAIN_CHANCE:
         user["balance"] += amount
+        user["total_claimed"] += amount
     else:
         user["balance"] -= amount
         

@@ -4,47 +4,59 @@
         "hp": 100,
         "armor": 0,
         "strength": 1,
-        "balance": 649,
+        "duel_wins": 0,
+        "duel_losses": 0,
+        "balance": 674,
         "coinflip_wins": 3,
         "coinflip_losses": 2,
         "coinflip_biggest_win": 2,
         "coinflip_biggest_loss": 10,
-        "bonus_timer": 1787600335
+        "bonus_timer": 1787602328,
+        "total_claimed": 41
     },
     {
         "username": "rasgrin",
         "hp": 100,
         "armor": 0,
         "strength": 1,
-        "balance": 0,
-        "coinflip_wins": 1,
-        "coinflip_losses": 0,
+        "duel_wins": 0,
+        "duel_losses": 0,
+        "balance": 5,
+        "coinflip_wins": 2,
+        "coinflip_losses": 1,
         "coinflip_biggest_win": 39,
-        "coinflip_biggest_loss": 0,
-        "bonus_timer": 1787599365
+        "coinflip_biggest_loss": 1,
+        "bonus_timer": 1787601221,
+        "total_claimed": 0
     },
     {
         "username": "bankofkekistan",
         "hp": 100,
         "armor": 0,
         "strength": 1,
+        "duel_wins": 0,
+        "duel_losses": 0,
         "balance": 37,
         "coinflip_wins": 0,
         "coinflip_losses": 0,
         "coinflip_biggest_win": 0,
         "coinflip_biggest_loss": 0,
-        "bonus_timer": 1787573109
+        "bonus_timer": 1787573109,
+        "total_claimed": 0
     },
     {
         "username": "kinomamba",
         "hp": 100,
         "armor": 0,
         "strength": 1,
+        "duel_wins": 0,
+        "duel_losses": 0,
         "balance": 9,
         "coinflip_wins": 0,
         "coinflip_losses": 0,
         "coinflip_biggest_win": 0,
         "coinflip_biggest_loss": 0,
-        "bonus_timer": 1787600368
+        "bonus_timer": 1787600368,
+        "total_claimed": 0
     }
 ]

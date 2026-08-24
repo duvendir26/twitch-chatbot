@@ -9,12 +9,12 @@ async def cmd_stats(username, reply, args=None):
     user = get_user(username)
 
     biggest_win = (
-    f"Biggest Coinflip Win: {user['coinflip_biggest_win']} 🍪 | "
+    f"🪙 Biggest coinflip win: {user['coinflip_biggest_win']} 🍪 | "
     if user['coinflip_biggest_win'] != 0 else ""
 )
 
     biggest_loss = (
-        f"Biggest Coinflip Loss: {user['coinflip_biggest_loss']} 🍪 | "
+        f"🪙 Biggest coinflip loss: {user['coinflip_biggest_loss']} 🍪 | "
         if user['coinflip_biggest_loss'] != 0 else ""
     )
     
@@ -27,17 +27,19 @@ async def cmd_stats(username, reply, args=None):
         bonus_timer = "Bonus not claimed ($kek)"
 
     stats_message = (
-        f"@{username} Stats: "
-        f"HP: {user['hp']} | "
-        f"Armor: {user['armor']} | "
-        f"Strength: {user['strength']} | "
+        f"@{username} [ "
+        f"{user['hp']} ❤️ | "
+        f"{user['armor']} 🛡️ | "
+        f"{user['strength']} 💪 | "
+        f"⚔️ Wins: {user['duel_wins']} | "
+        f"⚔️ Losses: {user['duel_losses']} ] - [ "
         f"Balance: {user['balance']} 🍪 | "
-        f"Coinflip Wins: {user['coinflip_wins']} | "
-        f"Coinflip Losses: {user['coinflip_losses']} | "
         f"{biggest_win}"
         f"{biggest_loss}"
-        f"Win Rate: {user['coinflip_wins'] / (user['coinflip_wins'] + user['coinflip_losses']) * 100 if (user['coinflip_wins'] + user['coinflip_losses']) > 0 else 0:.2f}% | "
-        f"{bonus_timer}"
+        f"🪙 Win Rate: {user['coinflip_wins'] / (user['coinflip_wins'] + user['coinflip_losses']) * 100 if (user['coinflip_wins'] + user['coinflip_losses']) > 0 else 0:.2f}% ] - ["
+        f"📉 Stocks: () ] "
+        f"- [ {bonus_timer} | "
+        f"Total Claimed: {user['total_claimed']} 🍪 ]"
     )
 
     await reply(stats_message)
