@@ -1,10 +1,11 @@
 from commands.daily import cmd_daily
-
-COMMAND_PREFIX = "$"
+from commands.coinflip import cmd_coinflip
+from config import COMMAND_PREFIX
 
 COMMANDS = {
     "kek": cmd_daily,
-    "daily": cmd_daily #? ALIAS
+    "daily": cmd_daily, #? ALIAS
+    "coinflip": cmd_coinflip,
 }
 
 
