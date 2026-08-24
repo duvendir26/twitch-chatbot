@@ -1,12 +1,12 @@
- [
+[
     {
         "username": "the_kekbot",
-        "balance": 0,
-        "last_daily": 0
+        "balance": 168,
+        "last_daily": 1787563564
     },
     {
         "username": "rasgrin",
-        "balance": 0,
-        "last_daily": 0
+        "balance": 6,
+        "last_daily": 1787562735
     }
- ]
+]
