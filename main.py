@@ -24,8 +24,10 @@ class TwitchBot(commands.Bot):
             ]
         )
 
+
     async def event_ready(self):
         print(f"Connected as {self.nick}")
+
 
     async def event_message(self, message):
         if message.echo:
@@ -34,7 +36,8 @@ class TwitchBot(commands.Bot):
         await process_message(
             message.author.name,
             message.content,
-            message.channel.send
+            message.channel.send,
+            message.timestamp
         )
 
 

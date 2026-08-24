@@ -8,7 +8,13 @@ COMMANDS = {
 }
 
 
-async def process_message(username, content, reply):
+async def process_message(username, content, reply, timestamp):
+    print(
+        f"{timestamp} - "
+        f"{username}: "
+        f"{content}"
+    )
+    
     if not content.startswith(COMMAND_PREFIX):
         return
 
