@@ -16,12 +16,16 @@ logging.basicConfig(
 
 class TwitchBot(commands.Bot):
     def __init__(self):
+        channels = [
+            channel.strip()
+            for channel in os.getenv("TWITCH_CHANNEL", "").split(",")
+            if channel.strip()
+        ]
+
         super().__init__(
             token=os.getenv("TWITCH_TOKEN"),
             prefix="$",
-            initial_channels=[
-                os.getenv("TWITCH_CHANNEL")
-            ]
+            initial_channels=channels
         )
 
 

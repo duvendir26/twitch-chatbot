@@ -62,6 +62,6 @@ async def cmd_coinflip(username, reply, args=None):
 
     await reply(
         f"@{username} Coin lands on {result} {emote} | "
-        f"{result_text} 🍪 | "
+        f"Change: {result_text} 🍪 | "
         f"Balance: {user['balance']} 🍪"
     )
