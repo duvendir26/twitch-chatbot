@@ -8,14 +8,17 @@ from handler import process_message
 
 load_dotenv()
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
 class TwitchBot(commands.Bot):
+
     def __init__(self):
         super().__init__(
             token=os.getenv("TWITCH_TOKEN"),
-            client_id=os.getenv("TWITCH_CLIENT_ID"),
             prefix="$",
             initial_channels=[
                 os.getenv("TWITCH_CHANNEL")
