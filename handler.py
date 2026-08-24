@@ -1,8 +1,9 @@
 from commands.daily import cmd_daily
 from commands.coinflip import cmd_coinflip
 from commands.leaderboard import cmd_leaderboard
-
+from commands.bottom import cmd_bottom
 from commands.stats import cmd_stats
+
 from config import COMMAND_PREFIX
 
 COMMANDS = {
@@ -13,7 +14,9 @@ COMMANDS = {
     
     "leaderboard": cmd_leaderboard,
     
-    "stats": cmd_stats
+    "stats": cmd_stats,
+    
+    "bottom": cmd_bottom,
 }
 
 
