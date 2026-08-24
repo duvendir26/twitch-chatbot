@@ -1,7 +1,7 @@
 import random
 
-DAILY_MIN = 25
-DAILY_MAX = 100
+DAILY_MIN = 0
+DAILY_MAX = 25
 
 GAIN_CHANCE = 0.8
 LOSE_CHANCE = 0.2
