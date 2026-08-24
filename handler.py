@@ -2,13 +2,18 @@ from commands.daily import cmd_daily
 from commands.coinflip import cmd_coinflip
 from commands.leaderboard import cmd_leaderboard
 
+from commands.stats import cmd_stats
 from config import COMMAND_PREFIX
 
 COMMANDS = {
     "kek": cmd_daily,
     "daily": cmd_daily, #? ALIAS
+    
     "coinflip": cmd_coinflip,
+    
     "leaderboard": cmd_leaderboard,
+    
+    "stats": cmd_stats
 }
 
 

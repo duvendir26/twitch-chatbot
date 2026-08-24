@@ -51,10 +51,20 @@ async def cmd_coinflip(username, reply, args=None):
     result = random.choice(["heads", "tails"])
     if result == side:
         user["balance"] += amount
+        user["coinflip_wins"] += 1
+        
+        if amount > user["coinflip_biggest_win"]:
+            user["coinflip_biggest_win"] = amount
+        
         result_text = f"+{amount}"
         emote = "KEKP Clap"
     else:
         user["balance"] -= amount
+        user["coinflip_losses"] += 1
+        
+        if amount > user["coinflip_biggest_loss"]:
+            user["coinflip_biggest_loss"] = amount
+        
         result_text = f"-{amount}"
         emote = "KEKScreen"
 

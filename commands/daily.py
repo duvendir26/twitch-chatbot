@@ -9,7 +9,7 @@ DAILY_MAX = 30
 GAIN_CHANCE = 0.8
 LOSE_CHANCE = 0.2
 
-COOLDOWN_TIME = 15 * 60
+COOLDOWN_TIME = 30 * 60
 COOLDOWN_IMMUNITY = ["the_kekbot"] #? FOR TESTING
 
 messagesZero = [
@@ -51,18 +51,18 @@ async def cmd_daily(username, reply, args=None):
     
     amount = random.randint(DAILY_MIN, DAILY_MAX)
     roll = random.random()
-    
+
     if roll == 0.05:
         await reply(
-            f"@{username} {random.choice(messagesZero)} | +0 🍪"
+            f"@{username} {random.choice(messagesZero)} | Change: +0 🍪 | Balance: {user['balance']} 🍪"
         )
     elif roll < GAIN_CHANCE and not roll == 0.05:
         await reply(
-            f"@{username} {random.choice(messagesGain)} | +{amount} 🍪"
+            f"@{username} {random.choice(messagesGain)} | Change: +{amount} 🍪 | Balance: {user['balance'] + amount} 🍪"
         )
     else:
         await reply(
-            f"@{username} {random.choice(messagesLose)} | -{amount} 🍪"
+            f"@{username} {random.choice(messagesLose)} | Change: -{amount} 🍪 | Balance: {user['balance'] - amount} 🍪"
         )
         
     if roll < GAIN_CHANCE:

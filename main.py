@@ -4,7 +4,6 @@ import logging
 
 from dotenv import load_dotenv
 from twitchio.ext import commands
-
 from handler import process_message
 
 load_dotenv()

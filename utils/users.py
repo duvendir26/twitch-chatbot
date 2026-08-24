@@ -19,7 +19,14 @@ def add_user(username):
     if not any(user["username"] == username for user in users):
         users.append({
             "username": username,
+            "hp": 100,
+            "armor": 0,
+            "strength": 1,
             "balance": 0,
+            "coinflip_wins": 0,
+            "coinflip_losses": 0,
+            "coinflip_biggest_win": 0,
+            "coinflip_biggest_loss": 0,
             "last_daily": 0
         })
 

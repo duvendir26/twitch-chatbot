@@ -15,11 +15,30 @@ async def cmd_leaderboard(username, reply, args=None):
     leaderboard_message = "Top 10 users: "
     for i, user in enumerate(sorted_users[:10], start=1):
         separator = "" if i == 1 else " | "
-
-        leaderboard_message += (
-            f"{separator}{i}. "
-            f"{user['username']}: "
-            f"{user['balance']} 🍪"
-        )
+        
+        if i == 1:
+            leaderboard_message += (
+                f"{separator} 👑 "
+                f"{user['username']}: "
+                f"{user['balance']} 🍪"
+            )
+        elif i == 2:
+            leaderboard_message += (
+                f"{separator} 🥈 "
+                f"{user['username']}: "
+                f"{user['balance']} 🍪"
+            )
+        elif i == 3:
+            leaderboard_message += (
+                f"{separator} 🥉 "
+                f"{user['username']}: "
+                f"{user['balance']} 🍪"
+            )
+        else:
+            leaderboard_message += (
+                f"{separator}{i}. "
+                f"{user['username']}: "
+                f"{user['balance']} 🍪"
+            )
 
     await reply(leaderboard_message)
