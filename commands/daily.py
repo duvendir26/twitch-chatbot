@@ -32,7 +32,7 @@ messagesLose = [
 
 messagesTime = [
     "You must wait before claiming your next daily reward KEKScreen | Balance: {balance} 🍪 | Cooldown: {minutes}m {seconds}s",
-    "You are too early to collect your keks. KEKScreen | Balance: {balance} 🍪 | Cooldown: {minutes}m {seconds}s",
+    "You are too early to collect your keks KEKScreen | Balance: {balance} 🍪 | Cooldown: {minutes}m {seconds}s",
     "You have already collected your keks KEKScreen | Balance: {balance} 🍪 | Cooldown: {minutes}m {seconds}s",
 ]
 
