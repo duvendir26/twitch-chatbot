@@ -31,20 +31,22 @@ messagesLose = [
 ]
 
 messagesTime = [
-    "You must wait [ {minutes}m {seconds}s ] minutes before claiming your next daily reward KEKScreen",
-    "You are too early to collect your keks. Please wait [ {minutes}m {seconds}s ] minutes KEKScreen",
-    "You have already collected your keks today. Come back in [ {minutes}m {seconds}s ] minutes KEKScreen",
+    "You must wait before claiming your next daily reward KEKScreen | Balance: {balance} 🍪 | Cooldown: {minutes}m {seconds}s",
+    "You are too early to collect your keks. KEKScreen | Balance: {balance} 🍪 | Cooldown: {minutes}m {seconds}s",
+    "You have already collected your keks KEKScreen | Balance: {balance} 🍪 | Cooldown: {minutes}m {seconds}s",
 ]
 
-
 async def cmd_daily(username, reply, args=None):
+    print(f"@{username} requested daily command with args: {args}")
+    #!---------------------------------------------------------------------------------------
+    
     user = get_user(username)
     last_daily = int(user["last_daily"])
     
     minutes = int((last_daily + COOLDOWN_TIME - time()) / 60)
     seconds = int((last_daily + COOLDOWN_TIME - time()) % 60)
     if username not in COOLDOWN_IMMUNITY and last_daily + COOLDOWN_TIME > time():
-        await reply(f"@{username} {random.choice(messagesTime).format(minutes=minutes, seconds=seconds)}")
+        await reply(f"@{username} {random.choice(messagesTime).format(minutes=minutes, seconds=seconds, balance=user['balance'])}")
         return
     
     amount = random.randint(DAILY_MIN, DAILY_MAX)
