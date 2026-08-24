@@ -20,7 +20,7 @@ async def cmd_coinflip(username, reply, args=None):
 
     if side not in ("heads", "tails"):
         await reply(
-            f"@{username} Choose 'heads' or 'tails'"
+            f"@{username} Choose 'heads' or 'tails' KEKP"
         )
         return
 
@@ -32,19 +32,19 @@ async def cmd_coinflip(username, reply, args=None):
             amount = int(args[1])
         except ValueError:
             await reply(
-                f"@{username} Enter a valid number"
+                f"@{username} Enter a valid number KEKP"
             )
             return
 
     if amount <= 0:
         await reply(
-            f"@{username} You cannot bet 0 or a negative amount 🍪"
+            f"@{username} You cannot bet 0 or a negative amount 🍪 KEKWhat"
         )
         return
 
     if amount > user["balance"]:
         await reply(
-            f"@{username} You don't have enough 🍪"
+            f"@{username} You don't have enough 🍪 KEKScreen"
         )
         return
 
@@ -61,7 +61,7 @@ async def cmd_coinflip(username, reply, args=None):
     set_user(username, user)
 
     await reply(
-        f"@{username} Coin lands on {result} | "
+        f"@{username} Coin lands on {result} {emote} | "
         f"{result_text} 🍪 | "
-        f"Balance: {user['balance']} {emote}"
+        f"Balance: {user['balance']} 🍪"
     )
