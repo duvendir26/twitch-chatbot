@@ -96,7 +96,6 @@ async def cmd_buy(username, reply, args=None):
     stock_name = args[0].lower()
     amount_arg = args[1].lower()
 
-    # Find stock
     stocks = load_stocks()
 
     stock = next(
@@ -113,9 +112,7 @@ async def cmd_buy(username, reply, args=None):
         )
         return
 
-    # Find user
     users = load_users()
-
     user = next(
         (
             user for user in users
@@ -130,10 +127,8 @@ async def cmd_buy(username, reply, args=None):
         )
         return
 
-    # Get portfolio
     portfolio = user.setdefault("portfolio", [])
 
-    # Find existing holding
     owned_stock = next(
         (
             item for item in portfolio
@@ -145,7 +140,6 @@ async def cmd_buy(username, reply, args=None):
     current_amount = owned_stock["amount"] if owned_stock else 0
     remaining_limit = 100 - current_amount
 
-    # Already at 100 shares
     if remaining_limit <= 0:
         await reply(
             f"@{username} You already own the maximum of 100 "
@@ -156,13 +150,9 @@ async def cmd_buy(username, reply, args=None):
     price = stock["price"]
     balance = user["balance"]
 
-    # Handle "all"
     if amount_arg == "all":
-
-        # How many shares can they afford?
         affordable_amount = balance // price
 
-        # Don't allow more than the 100-share limit
         amount = min(affordable_amount, remaining_limit)
 
         if amount <= 0:
@@ -188,7 +178,6 @@ async def cmd_buy(username, reply, args=None):
             )
             return
 
-        # Check 100-share limit
         if amount > remaining_limit:
             await reply(
                 f"@{username} You can only buy {remaining_limit} more "
@@ -196,10 +185,8 @@ async def cmd_buy(username, reply, args=None):
             )
             return
 
-    # Calculate price
     total_cost = price * amount
 
-    # Check balance
     if balance < total_cost:
         await reply(
             f"@{username} You need {total_cost} 🍪 "
@@ -207,10 +194,8 @@ async def cmd_buy(username, reply, args=None):
         )
         return
 
-    # Take money
     user["balance"] -= total_cost
 
-    # Add shares
     if owned_stock:
         owned_stock["amount"] += amount
     else:
@@ -221,7 +206,6 @@ async def cmd_buy(username, reply, args=None):
 
         portfolio.append(owned_stock)
 
-    # Save only this user
     set_user(user["username"], user)
     
     portfolio_text = " | ".join(
@@ -253,7 +237,6 @@ async def cmd_sell(username, reply, args=None):
     stock_name = args[0].lower()
     amount_arg = args[1].lower()
 
-    # Find stock
     stocks = load_stocks()
 
     stock = next(
@@ -270,7 +253,6 @@ async def cmd_sell(username, reply, args=None):
         )
         return
 
-    # Find user
     users = load_users()
 
     user = next(
@@ -288,8 +270,6 @@ async def cmd_sell(username, reply, args=None):
         return
 
     portfolio = user.setdefault("portfolio", [])
-
-    # Find ONLY the requested stock
     owned_stock = next(
         (
             item for item in portfolio
@@ -306,7 +286,6 @@ async def cmd_sell(username, reply, args=None):
 
     owned_amount = owned_stock["amount"]
 
-    # Handle "all"
     if amount_arg == "all":
         amount = owned_amount
 
@@ -335,13 +314,10 @@ async def cmd_sell(username, reply, args=None):
     price = stock["price"]
     total_value = price * amount
 
-    # Give money
     user["balance"] += total_value
 
-    # Remove ONLY this stock's shares
     owned_stock["amount"] -= amount
 
-    # Remove this stock from portfolio if none remain
     if owned_stock["amount"] == 0:
         portfolio.remove(owned_stock)
 
