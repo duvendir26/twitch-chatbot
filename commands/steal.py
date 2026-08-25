@@ -3,9 +3,10 @@ import time
 
 from utils.users import load_users, set_user
 
-SUCCESS_RATE = 0.7
+SUCCESS_RATE = 0.25
 MIN_STEAL_BALANCE = 10
 STEAL_COOLDOWN = 30 * 60
+COOLDOWN_IMMUNITY = ["the_kekbot"] #? FOR TESTING
 
 
 async def cmd_steal(username, reply, args=None):
@@ -49,7 +50,7 @@ async def cmd_steal(username, reply, args=None):
 
     current_time = int(time.time())
     steal_timer = user.get("steal_timer", 0)
-    if current_time < steal_timer:
+    if current_time < steal_timer and username.lower() not in COOLDOWN_IMMUNITY:
         remaining = steal_timer - current_time
         minutes = remaining // 60
         seconds = remaining % 60
@@ -99,7 +100,7 @@ async def cmd_steal(username, reply, args=None):
         set_user(user["username"], user)
 
         await reply(
-            f"@{username} stole {amount} 🍪 "
+            f"@{username} Stole {amount} 🍪 "
             f"from {target_user['username']} KEKP "
         )
 
@@ -112,6 +113,6 @@ async def cmd_steal(username, reply, args=None):
         set_user(user["username"], user)
 
         await reply(
-            f"@{username} failed to steal from "
-            f"{target_user['username']} and lost {penalty} 🍪 KEKP"
+            f"@{username} Failed to steal from "
+            f"{target_user['username']} and lost -{penalty} 🍪 KEKP"
         )
