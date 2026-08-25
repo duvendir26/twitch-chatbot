@@ -13,6 +13,7 @@ COMMANDS = {
     "bonus": cmd_bonus, #? ALIAS
     "coinflip": cmd_coinflip,
     "leaderboard": cmd_leaderboard,
+    "top": cmd_leaderboard, #? ALIAS
     "stats": cmd_stats,
     "bottom": cmd_bottom,
     "commands": cmd_command_list,

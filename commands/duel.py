@@ -7,6 +7,7 @@
 from config import COMMAND_PREFIX
 from utils.users import get_user, load_users
 
+duel_requests = []
 
 async def cmd_duel(username, reply, args=None):
     print(f"@{username} requested duel command with args: {args}")
@@ -26,9 +27,24 @@ async def cmd_duel(username, reply, args=None):
         )
         return
     
+    if args[1].lower() == "all":
+        amount = get_user(username)["balance"]
+    else:
+        try:
+            amount = int(args[1])
+        except ValueError:
+            await reply(
+                f"@{username} Enter a valid number KEKP"
+            )
+            return
+    
     users = load_users()
-    if args[0].lower() not in [user["username"].lower() for user in users]:
-        await reply(
-            f"@{username} Opponent not found KEKScreen"
-        )
+    user = next((u for u in users if u['username'].lower() == username.lower()), None)
+    if not user:
+        await reply(f"@{username} You are not registered. Use $kek to register KEKP")
+        return
+    
+    opponent = next((u for u in users if u['username'].lower() == args[0].lstrip('@').lower()), None)
+    if not opponent:
+        await reply(f"@{username} User is not registered (has to use $kek) wideKEKA")
         return

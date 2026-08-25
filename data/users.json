@@ -21,13 +21,13 @@
         "energy": 100,
         "duel_wins": 0,
         "duel_losses": 0,
-        "balance": 8,
-        "coinflip_wins": 2,
-        "coinflip_losses": 1,
+        "balance": 0,
+        "coinflip_wins": 3,
+        "coinflip_losses": 3,
         "coinflip_biggest_win": 39,
-        "coinflip_biggest_loss": 1,
-        "bonus_timer": 1787654845,
-        "total_claimed": 20
+        "coinflip_biggest_loss": 75,
+        "bonus_timer": 1787664914,
+        "total_claimed": 73
     },
     {
         "username": "bankofkekistan",

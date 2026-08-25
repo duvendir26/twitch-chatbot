@@ -11,15 +11,15 @@ async def cmd_stats(username, reply, args=None):
 
     user = get_user(username)
 
-    biggest_win = (
-    f"🪙 Biggest coinflip win: {user['coinflip_biggest_win']} 🍪 | "
-    if user['coinflip_biggest_win'] != 0 else ""
-)
+    # biggest_win = (
+    # f"🪙 Biggest coinflip win: {user['coinflip_biggest_win']} 🍪 | "
+    # if user['coinflip_biggest_win'] != 0 else ""
+    # )
 
-    biggest_loss = (
-        f"🪙 Biggest coinflip loss: {user['coinflip_biggest_loss']} 🍪 | "
-        if user['coinflip_biggest_loss'] != 0 else ""
-    )
+    # biggest_loss = (
+    #     f"🪙 Biggest coinflip loss: {user['coinflip_biggest_loss']} 🍪 | "
+    #     if user['coinflip_biggest_loss'] != 0 else ""
+    # )
     
     remaining = user["bonus_timer"] + COOLDOWN_TIME - time.time()
     if remaining > 0:
@@ -37,9 +37,9 @@ async def cmd_stats(username, reply, args=None):
         f"⚔️ Wins: {user['duel_wins']} | "
         f"⚔️ Losses: {user['duel_losses']} ] - [ "
         f"Balance: {user['balance']} 🍪 | "
-        f"{biggest_win}"
-        f"{biggest_loss}"
-        f"🪙 Win Rate: {user['coinflip_wins'] / (user['coinflip_wins'] + user['coinflip_losses']) * 100 if (user['coinflip_wins'] + user['coinflip_losses']) > 0 else 0:.2f}% ] - ["
+        # f"{biggest_win}"
+        # f"{biggest_loss}"
+        f"🪙 Winrate: {user['coinflip_wins'] / (user['coinflip_wins'] + user['coinflip_losses']) * 100 if (user['coinflip_wins'] + user['coinflip_losses']) > 0 else 0:.2f}% ] - ["
         f"📉 Stocks: () ] "
         f"- [ {bonus_timer} | "
         f"Total claimed: {user['total_claimed']} 🍪 ]"

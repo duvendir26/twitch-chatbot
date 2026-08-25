@@ -32,7 +32,7 @@ async def cmd_send(username, reply, args=None):
     
     recipient_user = next((u for u in users if u['username'].lower() == recipient.lower()), None)
     if not recipient_user:
-        await reply(f"@{username} User is not registered (use $kek) wideKEKA")
+        await reply(f"@{username} User is not registered (has to use $kek) wideKEKA")
         return
 
     if user['balance'] < amount:
