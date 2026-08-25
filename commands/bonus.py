@@ -46,7 +46,7 @@ async def cmd_bonus(username, reply, args=None):
     minutes = int((bonus_timer + COOLDOWN_TIME - time()) / 60)
     seconds = int((bonus_timer + COOLDOWN_TIME - time()) % 60)
     if username not in COOLDOWN_IMMUNITY and bonus_timer + COOLDOWN_TIME > time():
-        await reply(f"@{username} {random.choice(messagesTime)} | Balance: {user['balance']} 🍪 | Cooldown: {minutes}m {seconds}s")
+        await reply(f"@{username} {random.choice(messagesTime)} | Balance: {user['balance']} 🍪 | Cooldown: {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
         return
     
     amount = random.randint(DAILY_MIN, DAILY_MAX)

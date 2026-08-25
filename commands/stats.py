@@ -25,7 +25,7 @@ async def cmd_stats(username, reply, args=None):
     if remaining > 0:
         minutes = int(remaining // 60)
         seconds = int(remaining % 60)
-        bonus_timer = f"Bonus cooldown: {minutes}m {seconds}s"
+        bonus_timer = f"Bonus cooldown: {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s"
     else:
         bonus_timer = f"Bonus not claimed ({COMMAND_PREFIX}kek)"
 
