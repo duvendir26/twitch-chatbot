@@ -40,7 +40,7 @@ async def cmd_stats(username, reply, args=None):
         # f"{biggest_win}"
         # f"{biggest_loss}"
         f"🪙 Winrate: {user['coinflip_wins'] / (user['coinflip_wins'] + user['coinflip_losses']) * 100 if (user['coinflip_wins'] + user['coinflip_losses']) > 0 else 0:.2f}% ] - ["
-        f"📉 Stocks: () ] "
+        f"📉 Stocks: ({', '.join([f'{item['name']}: {item['amount']}' for item in user['portfolio']])}) ] "
         f"- [ {bonus_timer} | "
         f"Total claimed: {user['total_claimed']} 🍪 ]"
     )

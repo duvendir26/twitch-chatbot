@@ -24,13 +24,13 @@
         "energy": 100,
         "duel_wins": 0,
         "duel_losses": 0,
-        "balance": 1100,
+        "balance": 1128,
         "coinflip_wins": 4,
         "coinflip_losses": 3,
         "coinflip_biggest_win": 39,
         "coinflip_biggest_loss": 75,
-        "bonus_timer": 1787668197,
-        "total_claimed": 88,
+        "bonus_timer": 1787672530,
+        "total_claimed": 116,
         "portfolio": [
             {
                 "name": "kekium",
