@@ -5,6 +5,7 @@ import logging
 from dotenv import load_dotenv
 from twitchio.ext import commands
 from handler import process_message
+from commands.stocks import update_stock_prices
 
 load_dotenv()
 
@@ -41,9 +42,23 @@ class TwitchBot(commands.Bot):
             message.channel.send,
             message.timestamp
         )
+        
+
+async def stock_runner():
+    while True:
+        try:
+            update_stock_prices()
+            logging.info("Stock prices updated")
+        except Exception:
+            logging.exception("Error updating stock prices")
+
+        await asyncio.sleep(1800)  # 30 minutes seems fair like bonus timer
+        # await asyncio.sleep(1)  # 1s for testing
 
 
 async def main():
+    asyncio.create_task(stock_runner())
+    
     while True:
         bot = TwitchBot()
 
