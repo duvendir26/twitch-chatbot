@@ -1,7 +1,8 @@
 # Users can send keks to eachother
 # Make sure the user is in the user list
-# Only $kek command adds new users
+#! Only $kek command adds new users
 
+from config import COMMAND_PREFIX
 from utils.users import load_users, set_user
 
 
@@ -9,7 +10,7 @@ async def cmd_send(username, reply, args=None):
     print(f"@{username} requested send command with args: {args}")
 
     if not args or len(args) < 2:
-        await reply(f"@{username} Usage: $send <recipient> <amount>")
+        await reply(f"@{username} Usage: {COMMAND_PREFIX}send <recipient> <amount>")
         return
 
     recipient = args[0].lstrip('@')

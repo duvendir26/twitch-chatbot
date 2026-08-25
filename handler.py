@@ -10,13 +10,14 @@ from config import COMMAND_PREFIX
 
 COMMANDS = {
     "kek": cmd_bonus,
-    "daily": cmd_bonus, #? ALIAS
+    "bonus": cmd_bonus, #? ALIAS
     "coinflip": cmd_coinflip,
     "leaderboard": cmd_leaderboard,
     "stats": cmd_stats,
     "bottom": cmd_bottom,
     "commands": cmd_command_list,
-    "send": cmd_send
+    "send": cmd_send,
+    "give": cmd_send, #? ALIAS
 }
 
 
