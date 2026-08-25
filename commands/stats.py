@@ -1,6 +1,6 @@
 import time
 
-from utils.users import get_user
+from utils.users import get_user, load_users
 from commands.bonus import COOLDOWN_TIME
 from config import COMMAND_PREFIX       
 
@@ -8,8 +8,25 @@ from config import COMMAND_PREFIX
 
 async def cmd_stats(username, reply, args=None):
     print(f"@{username} requested stats command with args: {args}")
+    
+    #! If second argument is provided, use it as the username to fetch stats for
+    if args and len(args) > 0:
+        username = args[0]
 
-    user = get_user(username)
+    users = load_users()
+    user = next(
+        (
+            user for user in users
+            if user["username"].lower() == username.lower()
+        ),
+        None
+    )
+    
+    if user is None:
+        await reply(
+            f"@{username} User not found. Use $kek to register KEKP"
+        )
+        return
 
     # biggest_win = (
     # f"🪙 Biggest coinflip win: {user['coinflip_biggest_win']} 🍪 | "

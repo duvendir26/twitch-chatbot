@@ -3,11 +3,17 @@ import time
 
 from utils.users import load_users, set_user
 
-SUCCESS_RATE = 0.25
+SUCCESS_RATE = 0.35
+FATAL_FAILURE_RATE = 0.05 # Thief loses hp and balance (or even dies) on this chance
 MIN_STEAL_BALANCE = 10
 STEAL_COOLDOWN = 30 * 60
 COOLDOWN_IMMUNITY = ["the_kekbot"] #? FOR TESTING
 
+# Stealing should also hurt target on success (reduce their HP) and on failure thief should lose hp or even lose all (on rare chance) and then he drops his whole balance
+# It can also hurt both players
+# You cant steal from someone who is dead and also not in chat (track last message time) if its past 15 min
+# Honor system (if you steal you lose honor but if you give away you gain it)
+# Low honor cant duel
 
 async def cmd_steal(username, reply, args=None):
     print(f"@{username} requested steal command with args: {args}")
@@ -21,7 +27,7 @@ async def cmd_steal(username, reply, args=None):
     target_username = args[0]
     if target_username.lower() == username.lower():
         await reply(
-            f"@{username} You cannot steal from yourself!"
+            f"@{username} You cannot steal from yourself KEKWhat"
         )
         return
 
@@ -40,6 +46,8 @@ async def cmd_steal(username, reply, args=None):
             f"Use $kek to register KEKP"
         )
         return
+    
+    
 
     if user["balance"] < MIN_STEAL_BALANCE:
         await reply(
@@ -57,7 +65,8 @@ async def cmd_steal(username, reply, args=None):
 
         await reply(
             f"@{username} You need to wait "
-            f"before stealing again KEKP | Cooldown: {(str(minutes) + 'm' if minutes > 0 else '')} {seconds}s "
+            f"before stealing again KEKP "
+            f"| Cooldown: {(str(minutes) + 'm' if minutes > 0 else '')} {seconds}s "
         )
         return
 
@@ -71,8 +80,20 @@ async def cmd_steal(username, reply, args=None):
 
     if not target_user:
         await reply(
-            f"@{username} Target user '{target_username}' "
+            f"@{username} User '{target_username}' "
             f"not found (didn't use $kek) KEKP"
+        )
+        return
+    
+    if target_user["username"].lower() == "the_kekbot":
+        await reply(
+            f"@{username} You cannot steal from the bot KEKP"
+        )
+        return
+    
+    if target_user["last_seen"] < int(time.time()) - 15 * 60:
+        await reply(
+            f"@{username} User has was not active in last 15 minutes (last seen {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(target_user['last_seen']))}) KEKP"
         )
         return
 
@@ -113,6 +134,6 @@ async def cmd_steal(username, reply, args=None):
         set_user(user["username"], user)
 
         await reply(
-            f"@{username} Failed to steal from "
-            f"{target_user['username']} and lost -{penalty} 🍪 KEKP"
+            f"@{username} Got caught stealing from "
+            f"{target_user['username']} and lost -{penalty} 🍪 ALERT creaturePolice ALERT"
         )

@@ -1,7 +1,7 @@
 import json
 
 USERS_FILE = "data/users.json"
-
+USER_RESPAWN_TIME = 24 * 60 * 60
 
 def load_users():
     with open(USERS_FILE, "r") as f:
@@ -20,7 +20,9 @@ def add_user(username):
         users.append({
             "username": username,
             "twitch_channel": "https://twitch.com/" + username,
+            "last_seen": 0,
             "hp": 100,
+            "death_time": 0,
             "armor": 0,
             "energy": 100,
             "duel_wins": 0,
@@ -57,6 +59,16 @@ def set_user(username, user_data):
     for i, user in enumerate(users):
         if user["username"] == username:
             users[i] = user_data
+            break
+
+    save_users(users)
+    
+def update_last_seen(username, timestamp):
+    users = load_users()
+
+    for user in users:
+        if user["username"] == username:
+            user["last_seen"] = timestamp
             break
 
     save_users(users)
