@@ -86,9 +86,7 @@ async def cmd_steal(username, reply, args=None):
         target_user["balance"]
     )
 
-
     amount = random.randint(1, max_steal)
-
 
     user["steal_timer"] = current_time + STEAL_COOLDOWN
 
@@ -101,10 +99,8 @@ async def cmd_steal(username, reply, args=None):
         set_user(user["username"], user)
 
         await reply(
-            f"@{username} stole "
+            f"@{username} stole {amount} 🍪 "
             f"from {target_user['username']} KEKP "
-            f"| Change: +{amount} 🍪 "
-            f"| Balance: {user['balance']} 🍪"
         )
 
     else:
@@ -117,7 +113,5 @@ async def cmd_steal(username, reply, args=None):
 
         await reply(
             f"@{username} failed to steal from "
-            f"{target_user['username']} KEKP "
-            f"| Change: -{penalty} 🍪 "
-            f"| Balance: {user['balance']} 🍪"
+            f"{target_user['username']} and lost {penalty} 🍪 KEKP"
         )
