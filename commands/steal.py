@@ -93,7 +93,7 @@ async def cmd_steal(username, reply, args=None):
     
     if target_user["last_seen"] < int(time.time()) - 15 * 60:
         await reply(
-            f"@{username} User has was not active in last 15 minutes (last seen {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(target_user['last_seen']))}) KEKP"
+            f"@{username} User was not active in the last 15 minutes (last seen {time.strftime('%d.%m.%Y %H:%M:%S', time.localtime(target_user['last_seen']))} CEST) KEKP"
         )
         return
 
