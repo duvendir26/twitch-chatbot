@@ -2,6 +2,7 @@ import os
 import asyncio
 import logging
 
+from config import STOCK_UPDATE_INTERVAL, COMMAND_PREFIX
 from dotenv import load_dotenv
 from twitchio.ext import commands
 from handler import process_message
@@ -25,7 +26,7 @@ class TwitchBot(commands.Bot):
 
         super().__init__(
             token=os.getenv("TWITCH_TOKEN"),
-            prefix="$",
+            prefix=COMMAND_PREFIX,
             initial_channels=channels
         )
 
@@ -52,7 +53,7 @@ async def stock_runner():
         except Exception:
             logging.exception("Error updating stock prices")
 
-        await asyncio.sleep(1800)  # 30 minutes seems fair like bonus timer
+        await asyncio.sleep(STOCK_UPDATE_INTERVAL)  # 30 minutes seems fair like bonus timer
         # await asyncio.sleep(1)  # 1s for testing
 
 

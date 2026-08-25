@@ -82,6 +82,7 @@ async def cmd_portfolio(username, reply, args=None):
         f"| Total Value: {total_value} 🍪"
     )
     
+    
 async def cmd_buy(username, reply, args=None):
     args = args or []
 
@@ -363,8 +364,6 @@ async def cmd_sell(username, reply, args=None):
         f"Balance: {user['balance']} 🍪 | "
         f"Portfolio: {portfolio_text}"
     )
-
-
 
 
 def update_stock_prices():
