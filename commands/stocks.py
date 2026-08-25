@@ -17,9 +17,6 @@ async def cmd_stocks(username, reply, args=None):
     )
 
     await reply(f"@{username} Stocks: {stock_list}")
-    
-from utils.stocks import load_stocks
-from utils.users import load_users
 
 
 async def cmd_portfolio(username, reply, args=None):
