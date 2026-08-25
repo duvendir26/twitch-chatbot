@@ -21,7 +21,7 @@ def add_user(username):
             "username": username,
             "hp": 100,
             "armor": 0,
-            "strength": 1,
+            "energy": 100,
             "duel_wins": 0,
             "duel_losses": 0,
             "balance": 0,

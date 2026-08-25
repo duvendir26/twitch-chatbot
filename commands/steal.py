@@ -1,0 +1,2 @@
+# System for stealing keks from other users
+# Make sure there are no loopholes and abuses in the system. Implement a cooldown period for stealing keks to prevent spamming. Ensure that users cannot steal from themselves and that the amount stolen is reasonable and fair. Consider adding a risk factor where stealing can fail, resulting in a penalty for the thief.

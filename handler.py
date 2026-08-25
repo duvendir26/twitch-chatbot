@@ -4,6 +4,7 @@ from commands.leaderboard import cmd_leaderboard
 from commands.bottom import cmd_bottom
 from commands.stats import cmd_stats
 from commands.commandList import cmd_command_list
+from commands.send import cmd_send
 
 from config import COMMAND_PREFIX
 
@@ -15,6 +16,7 @@ COMMANDS = {
     "stats": cmd_stats,
     "bottom": cmd_bottom,
     "commands": cmd_command_list,
+    "send": cmd_send
 }
 
 
