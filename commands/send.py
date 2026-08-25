@@ -17,7 +17,7 @@ async def cmd_send(username, reply, args=None):
     try:
         amount = int(args[1])
     except ValueError:
-        await reply(f"@{username} Invalid amount. Please enter a valid number.")
+        await reply(f"@{username} Invalid amount. Please enter a valid number KEKP")
         return
 
     if amount <= 0:
@@ -36,7 +36,7 @@ async def cmd_send(username, reply, args=None):
         return
 
     if user['balance'] < amount:
-        await reply(f"@{username} You do not have enough keks to send.")
+        await reply(f"@{username} You do not have enough keks to send KEKP")
         return
 
     user['balance'] -= amount
@@ -45,4 +45,4 @@ async def cmd_send(username, reply, args=None):
     set_user(user['username'], user)
     set_user(recipient_user['username'], recipient_user)
 
-    await reply(f"@{username} sent {amount} 🍪 to @{recipient}.")
+    await reply(f"@{username} sent {amount} 🍪 to @{recipient} KEKP")

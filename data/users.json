@@ -7,14 +7,15 @@
         "energy": 100,
         "duel_wins": 0,
         "duel_losses": 0,
-        "balance": 0,
+        "balance": 19,
         "coinflip_wins": 3,
         "coinflip_losses": 2,
         "coinflip_biggest_win": 2,
         "coinflip_biggest_loss": 10,
         "bonus_timer": 1787602328,
         "total_claimed": 41,
-        "portfolio": {}
+        "steal_timer": 0,
+        "portfolio": []
     },
     {
         "username": "rasgrin",
@@ -24,13 +25,14 @@
         "energy": 100,
         "duel_wins": 0,
         "duel_losses": 0,
-        "balance": 1128,
+        "balance": 913,
         "coinflip_wins": 4,
         "coinflip_losses": 3,
         "coinflip_biggest_win": 39,
         "coinflip_biggest_loss": 75,
         "bonus_timer": 1787672530,
         "total_claimed": 116,
+        "steal_timer": 1787677187,
         "portfolio": [
             {
                 "name": "kekium",
@@ -54,13 +56,14 @@
         "energy": 100,
         "duel_wins": 0,
         "duel_losses": 0,
-        "balance": 0,
+        "balance": 1,
         "coinflip_wins": 0,
-        "coinflip_losses": 2,
+        "coinflip_losses": 3,
         "coinflip_biggest_win": 0,
         "coinflip_biggest_loss": 677,
-        "bonus_timer": 1787669868,
-        "total_claimed": 0,
-        "portfolio": {}
+        "bonus_timer": 1787674883,
+        "total_claimed": 17,
+        "steal_timer": 0,
+        "portfolio": []
     }
 ]

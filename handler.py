@@ -5,6 +5,7 @@ from commands.bottom import cmd_bottom
 from commands.stats import cmd_stats
 from commands.commandList import cmd_command_list
 from commands.send import cmd_send
+from commands.steal import cmd_steal
 from commands.stocks import cmd_stocks, cmd_portfolio, cmd_buy, cmd_sell
 
 from config import COMMAND_PREFIX
@@ -26,6 +27,7 @@ COMMANDS = {
     "portfolio": cmd_portfolio,
     "buy": cmd_buy,
     "sell": cmd_sell,
+    "steal": cmd_steal,
 }
 
 

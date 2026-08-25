@@ -32,7 +32,8 @@ def add_user(username):
             "coinflip_biggest_loss": 0,
             "bonus_timer": 0,
             "total_claimed": 0,
-            "portfolio": {}
+            "steal_timer": 0,
+            "portfolio": []
         })
 
         save_users(users)
