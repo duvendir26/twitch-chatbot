@@ -22,6 +22,7 @@ COMMANDS = {
     "give": cmd_send, #? ALIAS
     "stocks": cmd_stocks,
     "price": cmd_stocks, #? ALIAS
+    "prices": cmd_stocks, #? ALIAS
     "portfolio": cmd_portfolio,
     "buy": cmd_buy,
     "sell": cmd_sell,
