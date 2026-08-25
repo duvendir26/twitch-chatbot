@@ -19,6 +19,7 @@ def add_user(username):
     if not any(user["username"] == username for user in users):
         users.append({
             "username": username,
+            "twitch_channel": "https://twitch.com/" + username,
             "hp": 100,
             "armor": 0,
             "energy": 100,

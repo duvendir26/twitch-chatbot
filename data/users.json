@@ -1,6 +1,7 @@
 [
     {
         "username": "the_kekbot",
+        "twitch_channel": "https://twitch.com/the_kekbot",
         "hp": 100,
         "armor": 0,
         "energy": 100,
@@ -17,6 +18,7 @@
     },
     {
         "username": "rasgrin",
+        "twitch_channel": "https://twitch.com/rasgrin",
         "hp": 100,
         "armor": 0,
         "energy": 100,
@@ -46,6 +48,7 @@
     },
     {
         "username": "kinomamba",
+        "twitch_channel": "https://twitch.com/kinomamba",
         "hp": 100,
         "armor": 0,
         "energy": 100,
