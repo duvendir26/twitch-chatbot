@@ -1,10 +1,8 @@
-# Eating should heal player and reduce bonus cooldown.
-# If player has 0 health there is a respawn timer for 24 hours. He comes back with 10hp and then he can use other commands.
-# While dead he cant use anything and nobody can use anything on him.
 from time import time
-from config import COMMAND_PREFIX
-from utils.users import load_users
+from utils.users import load_users, set_user
 
+HEAL_PRICE = 50
+HEAL_AMOUNT = 20
 
 async def cmd_eat(username, reply, args=None):
     print(f"@{username} requested eat command with args: {args}")
@@ -23,4 +21,18 @@ async def cmd_eat(username, reply, args=None):
         await reply(f"@{username} You are dead KEKP | You will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
         return
 
-    # Implement eating logic here (e.g., heal player, reduce bonus cooldown, etc.)
+    if user['balance'] < HEAL_PRICE:
+        await reply(f"@{username} You don't have enough 🍪 to heal. You need {HEAL_PRICE} 🍪 KEKP")
+        return
+    
+    if user["hp"] >= 100:
+        await reply(f"@{username} You are already at full health KEKP")
+        return
+
+    amount = min(HEAL_AMOUNT, 100 - user["hp"])
+    user["hp"] += amount
+    user['balance'] -= HEAL_PRICE
+    
+    set_user(user["username"], user)
+    
+    await reply(f"@{username} You can eat them YouCanEatThem | Change: -{HEAL_PRICE} 🍪, +{HEAL_AMOUNT} ❤️ | Current HP: ❤️ {user['hp']}")

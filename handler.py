@@ -9,6 +9,7 @@ from commands.commandList import cmd_command_list
 from commands.send import cmd_send
 from commands.steal import cmd_steal
 from commands.stocks import cmd_stocks, cmd_portfolio, cmd_buy, cmd_sell
+from commands.eat import cmd_eat
 
 from config import COMMAND_PREFIX
 from utils.users import update_last_seen
@@ -46,6 +47,8 @@ COMMANDS = {
     "sell": cmd_sell,
     # ----------------------------
     "steal": cmd_steal,
+    # ---------------------------
+    "eat": cmd_eat,
 }
 
 
