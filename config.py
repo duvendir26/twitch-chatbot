@@ -9,3 +9,5 @@ EMOTES = [
     "KEKScreen",
     "KEKInsane",
 ]
+
+BANNED_USERS = []

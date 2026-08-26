@@ -7,6 +7,7 @@ SUCCESS_RATE = 0.35
 FATAL_FAILURE_RATE = 0.05 # Thief loses hp and balance (or even dies) on this chance
 MIN_STEAL_BALANCE = 10
 STEAL_COOLDOWN = 30 * 60
+ACTIVE_TIME_LIMIT = 15 * 60
 COOLDOWN_IMMUNITY = ["the_kekbot"] #? FOR TESTING
 
 # Stealing should also hurt target on success (reduce their HP) and on failure thief should lose hp or even lose all (on rare chance) and then he drops his whole balance
@@ -91,9 +92,9 @@ async def cmd_steal(username, reply, args=None):
         )
         return
     
-    if target_user["last_seen"] < int(time.time()) - 15 * 60:
+    if target_user["last_seen"] < int(time.time()) - ACTIVE_TIME_LIMIT:
         await reply(
-            f"@{username} User was not active in the last 15 minutes (last seen {time.strftime('%d.%m.%Y %H:%M:%S', time.localtime(target_user['last_seen']))} CEST) KEKP"
+            f"@{username} User '{target_user['username']}' was not active in the last {ACTIVE_TIME_LIMIT // 60} minutes (last seen {time.strftime('%d.%m.%Y %H:%M:%S', time.localtime(target_user['last_seen']))} CEST) KEKP"
         )
         return
 
