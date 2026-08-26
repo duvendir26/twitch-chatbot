@@ -1,3 +1,4 @@
+from time import time
 from config import COMMAND_PREFIX
 from utils.users import load_users, set_user
 

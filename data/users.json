@@ -95,14 +95,14 @@
     {
         "username": "bankofkekistan",
         "twitch_channel": "https://twitch.com/bankofkekistan",
-        "last_seen": 1787734048,
+        "last_seen": 1787734400,
         "hp": 0,
         "death_time": 1787733921,
         "armor": 0,
         "energy": 100,
         "duel_wins": 0,
         "duel_losses": 0,
-        "balance": 37,
+        "balance": 120,
         "coinflip_wins": 0,
         "coinflip_losses": 0,
         "coinflip_biggest_win": 0,
@@ -110,6 +110,11 @@
         "bonus_timer": 1787733921,
         "total_claimed": 37,
         "steal_timer": 1787700900,
-        "portfolio": []
+        "portfolio": [
+            {
+                "name": "kukle",
+                "amount": 1
+            }
+        ]
     }
 ]
