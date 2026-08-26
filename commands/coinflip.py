@@ -1,7 +1,8 @@
+from time import time
 import random
 
 from config import COMMAND_PREFIX
-from utils.users import get_user, set_user
+from utils.users import get_user, load_users, set_user
 
 
 async def cmd_coinflip(username, reply, args=None):
@@ -17,14 +18,36 @@ async def cmd_coinflip(username, reply, args=None):
         return
 
     side = args[0].lower()
-
     if side not in ("heads", "tails"):
         await reply(
             f"@{username} Choose 'heads' or 'tails' KEKP"
         )
         return
 
-    user = get_user(username)
+    users = load_users()
+    user = next(
+        (
+            user for user in users
+            if user["username"].lower() == username.lower()
+        ),
+    None
+    )
+
+    if not user:
+        await reply(
+            f"@{username} You are not registered. "
+            f"Use $kek to register KEKP"
+        )
+        return
+    
+    if user["hp"] <= 0:
+        hours = int((user["death_time"] + 24 * 60 * 60 - time()) / 3600)
+        minutes = int((user["death_time"] + 24 * 60 * 60 - time()) % 3600 / 60)
+        seconds = int((user["death_time"] + 24 * 60 * 60 - time()) % 60)
+        
+        await reply(f"@{username} You are dead KEKP | You will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
+        return
+
     if args[1].lower() == "all":
         amount = user["balance"]
     else:

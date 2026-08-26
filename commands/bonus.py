@@ -38,17 +38,15 @@ messagesTime = [
 
 async def cmd_bonus(username, reply, args=None):
     print(f"@{username} requested daily command with args: {args}")
-    #!---------------------------------------------------------------------------------------
     
     user = get_user(username)
-    #TODO: Add respawn timer for dead players (move to utils/users.py because it will be used in other commands too)
-    # if user["hp"] <= 0:
-    #     hours = int((user["death_time"] + 24 * 60 * 60 - time()) / 3600)
-    #     minutes = int((user["death_time"] + 24 * 60 * 60 - time()) % 3600 / 60)
-    #     seconds = int((user["death_time"] + 24 * 60 * 60 - time()) % 60)
+    if user["hp"] <= 0:
+        hours = int((user["death_time"] + 24 * 60 * 60 - time()) / 3600)
+        minutes = int((user["death_time"] + 24 * 60 * 60 - time()) % 3600 / 60)
+        seconds = int((user["death_time"] + 24 * 60 * 60 - time()) % 60)
         
-    #     await reply(f"@{username} You are dead KEKP | You will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
-    #     return
+        await reply(f"@{username} You are dead KEKP | You will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
+        return
     
     bonus_timer = int(user["bonus_timer"])
     minutes = int((bonus_timer + COOLDOWN_TIME - time()) / 60)

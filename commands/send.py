@@ -31,6 +31,14 @@ async def cmd_send(username, reply, args=None):
             f"Use $kek to register KEKP"
         )
         return
+    
+    if user["hp"] <= 0:
+        hours = int((user["death_time"] + 24 * 60 * 60 - time()) / 3600)
+        minutes = int((user["death_time"] + 24 * 60 * 60 - time()) % 3600 / 60)
+        seconds = int((user["death_time"] + 24 * 60 * 60 - time()) % 60)
+        
+        await reply(f"@{username} You are dead KEKP | You will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
+        return
 
     recipient_user = next(
         (

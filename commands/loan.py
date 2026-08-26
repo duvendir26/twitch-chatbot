@@ -7,3 +7,24 @@
 # Player that loaned has a command to repay the loan 
 # There is also a command to see your loans and for people to see how much they are owed 
 # so commands loan, repay, collect, loans (shows both your loans and loans owed to you)
+
+from time import time
+from utils.users import load_users
+
+
+async def cmd_loan(username, reply, args=None):
+    print(f"@{username} requested loan command with args: {args}")
+
+    users = load_users()
+    user = next((u for u in users if u['username'].lower() == username.lower()), None)
+    if not user:
+        await reply(f"@{username} You are not registered. Use $kek to register KEKP")
+        return
+    
+    if user["hp"] <= 0:
+        hours = int((user["death_time"] + 24 * 60 * 60 - time()) / 3600)
+        minutes = int((user["death_time"] + 24 * 60 * 60 - time()) % 3600 / 60)
+        seconds = int((user["death_time"] + 24 * 60 * 60 - time()) % 60)
+        
+        await reply(f"@{username} You are dead KEKP | You will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
+        return
