@@ -45,12 +45,29 @@ async def cmd_stats(username, reply, args=None):
         bonus_timer = f"Bonus cooldown: {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s"
     else:
         bonus_timer = f"Bonus not claimed ({COMMAND_PREFIX}kek)"
+        
+    if user["hp"] <= 0:
+        respawn_remaining = max(
+            0,
+            user["death_time"] + 24 * 60 * 60 - int(time())
+        )
+
+        respawn_hours = respawn_remaining // 3600
+        respawn_minutes = (respawn_remaining % 3600) // 60
+        respawn_seconds = respawn_remaining % 60
+
+        respawn_text = (
+            f"Respawn in {respawn_hours}h "
+            f"{respawn_minutes}m "
+            f"{respawn_seconds}s | "
+        )
+    else:
+        respawn_text = ""
 
     stats_message = (
         f"@{username} [ "
         f"❤️ {user['hp']} | "
-        f"🛡️ {user['armor']} | "
-        f"⚡ {user['energy']} | "
+        f"{respawn_text}"
         f"⚔️ Wins: {user['duel_wins']} | "
         f"⚔️ Losses: {user['duel_losses']} ] - [ "
         f"Balance: {user['balance']} 🍪 | "
