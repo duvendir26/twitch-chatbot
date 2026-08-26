@@ -28,3 +28,5 @@ async def cmd_loan(username, reply, args=None):
         
         await reply(f"@{username} You are dead KEKP | You will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
         return
+    
+    

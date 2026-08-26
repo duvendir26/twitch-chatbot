@@ -58,3 +58,11 @@ async def cmd_duel(username, reply, args=None):
     if not opponent:
         await reply(f"@{username} User is not registered (has to use $kek) wideKEKA")
         return
+    
+    if opponent["hp"] <= 0:
+        hours = int((opponent["death_time"] + 24 * 60 * 60 - time()) / 3600)
+        minutes = int((opponent["death_time"] + 24 * 60 * 60 - time()) % 3600 / 60)
+        seconds = int((opponent["death_time"] + 24 * 60 * 60 - time()) % 60)
+        
+        await reply(f"@{username} User '{opponent['username']}' is dead KEKP | Will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
+        return

@@ -61,6 +61,14 @@ async def cmd_send(username, reply, args=None):
             f"@{username} You cannot send keks to yourself KEKP"
         )
         return
+    
+    if recipient_user["hp"] <= 0:
+        hours = int((recipient_user["death_time"] + 24 * 60 * 60 - time()) / 3600)
+        minutes = int((recipient_user["death_time"] + 24 * 60 * 60 - time()) % 3600 / 60)
+        seconds = int((recipient_user["death_time"] + 24 * 60 * 60 - time()) % 60)
+        
+        await reply(f"@{username} User '{recipient_user['username']}' is dead KEKP | Will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
+        return
 
     if amount_arg == "all":
         amount = user["balance"]

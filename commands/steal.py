@@ -1,6 +1,6 @@
 import random
-import time
 
+from time import time
 from utils.users import load_users, set_user
 
 SUCCESS_RATE = 0.35
@@ -63,7 +63,7 @@ async def cmd_steal(username, reply, args=None):
         )
         return
 
-    current_time = int(time.time())
+    current_time = int(time())
     steal_timer = user.get("steal_timer", 0)
     if current_time < steal_timer and username.lower() not in COOLDOWN_IMMUNITY:
         remaining = steal_timer - current_time
@@ -96,6 +96,14 @@ async def cmd_steal(username, reply, args=None):
         await reply(
             f"@{username} You cannot steal from the bot KEKP"
         )
+        return
+    
+    if target_user["hp"] <= 0:
+        hours = int((target_user["death_time"] + 24 * 60 * 60 - time()) / 3600)
+        minutes = int((target_user["death_time"] + 24 * 60 * 60 - time()) % 3600 / 60)
+        seconds = int((target_user["death_time"] + 24 * 60 * 60 - time()) % 60)
+        
+        await reply(f"@{username} User '{target_user['username']}' is dead KEKP | Will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
         return
     
     if target_user["last_seen"] < int(time.time()) - ACTIVE_TIME_LIMIT:
