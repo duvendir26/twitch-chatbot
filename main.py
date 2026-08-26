@@ -43,7 +43,7 @@ class TwitchBot(commands.Bot):
             message.channel.send,
             message.timestamp
         )
-        
+
 
 async def stock_runner():
     while True:
@@ -53,21 +53,65 @@ async def stock_runner():
         except Exception:
             logging.exception("Error updating stock prices")
 
-        await asyncio.sleep(STOCK_UPDATE_INTERVAL)  # 30 minutes seems fair like bonus timer
-        # await asyncio.sleep(1)  # 1s for testing
+        await asyncio.sleep(STOCK_UPDATE_INTERVAL)
+        # await asyncio.sleep(1)  # testing
+
+
+async def respawn_checker(bot):
+    while True:
+        try:
+            from utils.users import load_users, set_user
+            from time import time
+
+            users = load_users()
+            current_time = int(time())
+
+            for user in users:
+                if (
+                    user["hp"] <= 0
+                    and current_time >= user["death_time"] + 24 * 60 * 60
+                ):
+                    user["hp"] = 25
+                    user["death_time"] = 0
+
+                    set_user(user["username"], user)
+
+                    logging.info(
+                        f"User '{user['username']}' has respawned with 25 HP"
+                    )
+
+                    for channel in bot.connected_channels:
+                        await channel.send(
+                            f"@{user['username']} has respawned with 25 HP KEKP"
+                        )
+
+        except Exception:
+            logging.exception("Error checking respawn times")
+
+        await asyncio.sleep(10)
 
 
 async def main():
     asyncio.create_task(stock_runner())
-    
+
     while True:
         bot = TwitchBot()
 
+        respawn_task = asyncio.create_task(
+            respawn_checker(bot)
+        )
+
         try:
             await bot.start()
+
         except Exception:
-            logging.exception("Twitch connection lost. Reconnecting in 10 seconds...")
+            logging.exception(
+                "Twitch connection lost. Reconnecting in 10 seconds..."
+            )
+
         finally:
+            respawn_task.cancel()
+
             try:
                 await bot.close()
             except Exception:
