@@ -6,7 +6,8 @@ from config import STOCK_UPDATE_INTERVAL, COMMAND_PREFIX, USER_RESPAWN_TIME
 from dotenv import load_dotenv
 from twitchio.ext import commands
 from handler import process_message
-from commands.stocks import update_stock_prices
+from runners.respawn import respawn_runner
+from runners.stock import stock_runner
 
 load_dotenv()
 
@@ -45,52 +46,6 @@ class TwitchBot(commands.Bot):
         )
 
 
-async def stock_runner():
-    while True:
-        try:
-            update_stock_prices()
-            logging.info("Stock prices updated")
-        except Exception:
-            logging.exception("Error updating stock prices")
-
-        await asyncio.sleep(STOCK_UPDATE_INTERVAL)
-        # await asyncio.sleep(1)  # testing
-
-
-async def respawn_checker(bot):
-    while True:
-        try:
-            from utils.users import load_users, set_user
-            from time import time
-
-            users = load_users()
-            current_time = int(time())
-
-            for user in users:
-                if (
-                    user["hp"] <= 0
-                    and current_time >= user["death_time"] + USER_RESPAWN_TIME
-                ):
-                    user["hp"] = 25
-                    user["death_time"] = 0
-
-                    set_user(user["username"], user)
-
-                    logging.info(
-                        f"User '{user['username']}' has respawned with 25 HP"
-                    )
-
-                    for channel in bot.connected_channels:
-                        await channel.send(
-                            f"@{user['username']} has respawned with 25 HP KEKP"
-                        )
-
-        except Exception:
-            logging.exception("Error checking respawn times")
-
-        await asyncio.sleep(10)
-
-
 async def main():
     asyncio.create_task(stock_runner())
 
@@ -98,7 +53,7 @@ async def main():
         bot = TwitchBot()
 
         respawn_task = asyncio.create_task(
-            respawn_checker(bot)
+            respawn_runner(bot)
         )
 
         try:
