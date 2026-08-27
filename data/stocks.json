@@ -1,11 +1,11 @@
 [
     {
         "name": "kukle",
-        "price": 23
+        "price": 45
     },
     {
         "name": "pinjurcoin",
-        "price": 31
+        "price": 35
     },
     {
         "name": "kekcoin",
@@ -13,10 +13,10 @@
     },
     {
         "name": "kekium",
-        "price": 23
+        "price": 26
     },
     {
         "name": "cupkek",
-        "price": 7
+        "price": 42
     }
 ]

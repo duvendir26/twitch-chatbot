@@ -1,7 +1,7 @@
 import json
+from time import time
 
 USERS_FILE = "data/users.json"
-USER_RESPAWN_TIME = 24 * 60 * 60
 
 def load_users():
     with open(USERS_FILE, "r") as f:
@@ -20,7 +20,7 @@ def add_user(username):
         users.append({
             "username": username,
             "twitch_channel": "https://twitch.com/" + username,
-            "last_seen": 0,
+            "last_seen": time(),
             "hp": 100,
             "death_time": 0,
             "armor": 0,

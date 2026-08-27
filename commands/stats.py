@@ -2,7 +2,7 @@ import time
 
 from utils.users import get_user, load_users
 from commands.bonus import COOLDOWN_TIME
-from config import COMMAND_PREFIX       
+from config import COMMAND_PREFIX, USER_RESPAWN_TIME       
 
 #TODO: Players can spend keks to upgrade their stats (hp, armor, strength) and these upgrades will be permanent. Players can also spend keks to reset their stats back to the default values. Players can also spend keks to reset their duel wins and losses back to 0. Players can also spend keks to reset their coinflip wins and losses back to 0. Players can also spend keks to reset their stock portfolio back to the default values. Players can also spend keks to reset their bonus timer back to 0. Players can also spend keks to reset their total claimed back to 0.
 
@@ -49,7 +49,7 @@ async def cmd_stats(username, reply, args=None):
     if user["hp"] <= 0:
         respawn_remaining = max(
             0,
-            user["death_time"] + 24 * 60 * 60 - int(time())
+            user["death_time"] + USER_RESPAWN_TIME - int(time.time())
         )
 
         respawn_hours = respawn_remaining // 3600

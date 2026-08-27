@@ -2,7 +2,7 @@ import os
 import asyncio
 import logging
 
-from config import STOCK_UPDATE_INTERVAL, COMMAND_PREFIX
+from config import STOCK_UPDATE_INTERVAL, COMMAND_PREFIX, USER_RESPAWN_TIME
 from dotenv import load_dotenv
 from twitchio.ext import commands
 from handler import process_message
@@ -69,7 +69,7 @@ async def respawn_checker(bot):
             for user in users:
                 if (
                     user["hp"] <= 0
-                    and current_time >= user["death_time"] + 24 * 60 * 60
+                    and current_time >= user["death_time"] + USER_RESPAWN_TIME
                 ):
                     user["hp"] = 25
                     user["death_time"] = 0

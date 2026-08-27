@@ -3,7 +3,7 @@ from time import time
 
 from utils.stocks import load_stocks, save_stocks
 from utils.users import load_users, set_user
-from config import COMMAND_PREFIX
+from config import COMMAND_PREFIX, USER_RESPAWN_TIME
 
 MIN_STOCK_PRICE = 5
 MAX_STOCK_PRICE = 50
@@ -129,9 +129,9 @@ async def cmd_buy(username, reply, args=None):
         return
     
     if user["hp"] <= 0:
-        hours = int((user["death_time"] + 24 * 60 * 60 - time()) / 3600)
-        minutes = int((user["death_time"] + 24 * 60 * 60 - time()) % 3600 / 60)
-        seconds = int((user["death_time"] + 24 * 60 * 60 - time()) % 60)
+        hours = int((user["death_time"] + USER_RESPAWN_TIME - time()) / 3600)
+        minutes = int((user["death_time"] + USER_RESPAWN_TIME - time()) % 3600 / 60)
+        seconds = int((user["death_time"] + USER_RESPAWN_TIME - time()) % 60)
         
         await reply(f"@{username} You are dead KEKP | You will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
         return
@@ -279,9 +279,9 @@ async def cmd_sell(username, reply, args=None):
         return
     
     if user["hp"] <= 0:
-        hours = int((user["death_time"] + 24 * 60 * 60 - time()) / 3600)
-        minutes = int((user["death_time"] + 24 * 60 * 60 - time()) % 3600 / 60)
-        seconds = int((user["death_time"] + 24 * 60 * 60 - time()) % 60)
+        hours = int((user["death_time"] + USER_RESPAWN_TIME - time()) / 3600)
+        minutes = int((user["death_time"] + USER_RESPAWN_TIME - time()) % 3600 / 60)
+        seconds = int((user["death_time"] + USER_RESPAWN_TIME - time()) % 60)
         
         await reply(f"@{username} You are dead KEKP | You will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
         return

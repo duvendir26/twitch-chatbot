@@ -11,3 +11,4 @@ EMOTES = [
 ]
 
 BANNED_USERS = []
+USER_RESPAWN_TIME = 3 * 60 * 60

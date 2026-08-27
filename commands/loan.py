@@ -10,6 +10,7 @@
 
 from time import time
 from utils.users import load_users
+from config import USER_RESPAWN_TIME
 
 
 async def cmd_loan(username, reply, args=None):
@@ -22,9 +23,9 @@ async def cmd_loan(username, reply, args=None):
         return
     
     if user["hp"] <= 0:
-        hours = int((user["death_time"] + 24 * 60 * 60 - time()) / 3600)
-        minutes = int((user["death_time"] + 24 * 60 * 60 - time()) % 3600 / 60)
-        seconds = int((user["death_time"] + 24 * 60 * 60 - time()) % 60)
+        hours = int((user["death_time"] + USER_RESPAWN_TIME - time()) / 3600)
+        minutes = int((user["death_time"] + USER_RESPAWN_TIME - time()) % 3600 / 60)
+        seconds = int((user["death_time"] + USER_RESPAWN_TIME - time()) % 60)
         
         await reply(f"@{username} You are dead KEKP | You will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
         return
