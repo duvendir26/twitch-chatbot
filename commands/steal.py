@@ -6,7 +6,6 @@ from config import USER_RESPAWN_TIME
 
 
 SUCCESS_RATE = 0.35
-FATAL_FAILURE_RATE = 0.05
 
 MIN_STEAL_BALANCE = 10
 STEAL_COOLDOWN = 30 * 60
@@ -34,8 +33,10 @@ async def cmd_steal(username, reply, args=None):
         return
 
     users = load_users()
-
-    # Find thief
+    # ---------------------------------------------------------
+    # FIND THIEF
+    # ---------------------------------------------------------
+    
     user = next(
         (
             user for user in users
@@ -51,12 +52,11 @@ async def cmd_steal(username, reply, args=None):
         )
         return
 
-    current_time = int(time.time())
-
     # ---------------------------------------------------------
     # THIEF: DEAD CHECK
     # ---------------------------------------------------------
-
+    
+    current_time = int(time.time())
     if user["hp"] <= 0:
         respawn_time = user["death_time"] + USER_RESPAWN_TIME
         remaining = max(0, respawn_time - current_time)
@@ -85,12 +85,11 @@ async def cmd_steal(username, reply, args=None):
         )
         return
 
-    # ---------------------------------------------------------
-    # COOLDOWN
-    # ---------------------------------------------------------
+    #! ---------------------------------------------------------
+    #! COOLDOWN
+    #! ---------------------------------------------------------
 
     steal_timer = user.get("steal_timer", 0)
-
     if (
         current_time < steal_timer
         and username.lower() not in COOLDOWN_IMMUNITY
@@ -160,7 +159,6 @@ async def cmd_steal(username, reply, args=None):
     # ---------------------------------------------------------
 
     last_seen = target_user.get("last_seen", 0)
-
     if last_seen < current_time - ACTIVE_TIME_LIMIT:
         last_seen_text = time.strftime(
             "%d.%m.%Y %H:%M:%S",
@@ -261,15 +259,10 @@ async def cmd_steal(username, reply, args=None):
 
         user["balance"] -= penalty
 
-        # 5% chance to instantly kill the thief
-        if random.random() < FATAL_FAILURE_RATE:
-            damage = user["hp"]
-        else:
-            # Damage is randomly chosen from 10 to thief's current HP
-            damage = random.randint(
-                min(10, user["hp"]),
-                user["hp"]
-            )
+        damage = random.randint(
+            min(10, user["hp"]),
+            user["hp"]
+        )
 
         user["hp"] -= damage
 
@@ -290,7 +283,7 @@ async def cmd_steal(username, reply, args=None):
             await reply(
                 f"@{username} Got caught stealing from "
                 f"{target_user['username']}, took -{damage} damage and died, "
-                f"dropping all -{dropped_keks} 🍪 KEKP"
+                f"dropping all -{dropped_keks + penalty} 🍪 KEKP"
             )
 
         # THIEF SURVIVES
