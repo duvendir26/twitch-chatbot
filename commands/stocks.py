@@ -1,9 +1,10 @@
 from random import randint
-from time import time
 
 from utils.stocks import load_stocks, save_stocks
-from utils.users import load_users, set_user
-from config import COMMAND_PREFIX, USER_RESPAWN_TIME
+from utils.users import find_user, load_users, reply_if_dead, reply_if_not_registered, set_user
+from utils.lookup import find_by_name
+from utils.amounts import parse_int_amount
+from config import COMMAND_PREFIX
 
 MIN_STOCK_PRICE = 5
 MAX_STOCK_PRICE = 50
@@ -26,18 +27,12 @@ async def cmd_portfolio(username, reply, args=None):
     users = load_users()
     stocks = load_stocks()
 
-    user = next(
-        (
-            user for user in users
-            if user["username"].lower() == username.lower()
-        ),
-        None
-    )
+    user = find_user(users, username)
 
-    if user is None:
-        await reply(
-            f"@{username} User not found. Use $kek to register KEKP"
-        )
+    if await reply_if_not_registered(
+        reply, username, user,
+        message=f"@{username} User not found. Use {COMMAND_PREFIX}kek to register KEKP"
+    ):
         return
 
     portfolio = user.get("portfolio", [])
@@ -50,13 +45,7 @@ async def cmd_portfolio(username, reply, args=None):
     total_value = 0
 
     for owned_stock in portfolio:
-        stock = next(
-            (
-                stock for stock in stocks
-                if stock["name"].lower() == owned_stock["name"].lower()
-            ),
-            None
-        )
+        stock = find_by_name(stocks, owned_stock["name"])
 
         if stock is None:
             continue
@@ -99,13 +88,7 @@ async def cmd_buy(username, reply, args=None):
 
     stocks = load_stocks()
 
-    stock = next(
-        (
-            stock for stock in stocks
-            if stock["name"].lower() == stock_name
-        ),
-        None
-    )
+    stock = find_by_name(stocks, stock_name)
 
     if stock is None:
         await reply(
@@ -114,37 +97,20 @@ async def cmd_buy(username, reply, args=None):
         return
 
     users = load_users()
-    user = next(
-        (
-            user for user in users
-            if user["username"].lower() == username.lower()
-        ),
-        None
-    )
+    user = find_user(users, username)
 
-    if user is None:
-        await reply(
-            f"@{username} User not found. Use $kek to register KEKP"
-        )
+    if await reply_if_not_registered(
+        reply, username, user,
+        message=f"@{username} User not found. Use {COMMAND_PREFIX}kek to register KEKP"
+    ):
         return
     
-    if user["hp"] <= 0:
-        hours = int((user["death_time"] + USER_RESPAWN_TIME - time()) / 3600)
-        minutes = int((user["death_time"] + USER_RESPAWN_TIME - time()) % 3600 / 60)
-        seconds = int((user["death_time"] + USER_RESPAWN_TIME - time()) % 60)
-        
-        await reply(f"@{username} You are dead KEKP | You will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
+    if await reply_if_dead(reply, username, user, is_self=True):
         return
 
     portfolio = user.setdefault("portfolio", [])
 
-    owned_stock = next(
-        (
-            item for item in portfolio
-            if item["name"].lower() == stock["name"].lower()
-        ),
-        None
-    )
+    owned_stock = find_by_name(portfolio, stock["name"])
 
     current_amount = owned_stock["amount"] if owned_stock else 0
     remaining_limit = 100 - current_amount
@@ -173,9 +139,8 @@ async def cmd_buy(username, reply, args=None):
 
     else:
         # Handle number
-        try:
-            amount = int(amount_arg)
-        except ValueError:
+        amount = parse_int_amount(amount_arg)
+        if amount is None:
             await reply(
                 f"@{username} Enter a valid number or 'all' KEKP"
             )
@@ -248,13 +213,7 @@ async def cmd_sell(username, reply, args=None):
 
     stocks = load_stocks()
 
-    stock = next(
-        (
-            stock for stock in stocks
-            if stock["name"].lower() == stock_name
-        ),
-        None
-    )
+    stock = find_by_name(stocks, stock_name)
 
     if stock is None:
         await reply(
@@ -264,36 +223,19 @@ async def cmd_sell(username, reply, args=None):
 
     users = load_users()
 
-    user = next(
-        (
-            user for user in users
-            if user["username"].lower() == username.lower()
-        ),
-        None
-    )
+    user = find_user(users, username)
 
-    if user is None:
-        await reply(
-            f"@{username} User not found. Use $kek to register KEKP"
-        )
+    if await reply_if_not_registered(
+        reply, username, user,
+        message=f"@{username} User not found. Use {COMMAND_PREFIX}kek to register KEKP"
+    ):
         return
     
-    if user["hp"] <= 0:
-        hours = int((user["death_time"] + USER_RESPAWN_TIME - time()) / 3600)
-        minutes = int((user["death_time"] + USER_RESPAWN_TIME - time()) % 3600 / 60)
-        seconds = int((user["death_time"] + USER_RESPAWN_TIME - time()) % 60)
-        
-        await reply(f"@{username} You are dead KEKP | You will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
+    if await reply_if_dead(reply, username, user, is_self=True):
         return
 
     portfolio = user.setdefault("portfolio", [])
-    owned_stock = next(
-        (
-            item for item in portfolio
-            if item["name"].lower() == stock["name"].lower()
-        ),
-        None
-    )
+    owned_stock = find_by_name(portfolio, stock["name"])
 
     if owned_stock is None or owned_stock["amount"] <= 0:
         await reply(
@@ -307,9 +249,8 @@ async def cmd_sell(username, reply, args=None):
         amount = owned_amount
 
     else:
-        try:
-            amount = int(amount_arg)
-        except ValueError:
+        amount = parse_int_amount(amount_arg)
+        if amount is None:
             await reply(
                 f"@{username} Enter a valid number or 'all' KEKP"
             )

@@ -1,8 +1,9 @@
 import random
 
 from time import time
-from utils.users import get_user, load_users, set_user
-from config import USER_RESPAWN_TIME
+from utils.users import get_user, load_users, reply_if_dead, set_user
+from utils.duration import format_duration
+from utils.xp import apply_kek_multiplier
 
 DAILY_MIN = 1
 DAILY_MAX = 30
@@ -41,31 +42,28 @@ async def cmd_bonus(username, reply, args=None):
     print(f"@{username} requested daily command with args: {args}")
     
     user = get_user(username)
-    if user["hp"] <= 0:
-        hours = int((user["death_time"] + USER_RESPAWN_TIME - time()) / 3600)
-        minutes = int((user["death_time"] + USER_RESPAWN_TIME - time()) % 3600 / 60)
-        seconds = int((user["death_time"] + USER_RESPAWN_TIME - time()) % 60)
-        
-        await reply(f"@{username} You are dead KEKP | You will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
+    if await reply_if_dead(reply, username, user, is_self=True):
         return
     
     bonus_timer = int(user["bonus_timer"])
-    minutes = int((bonus_timer + COOLDOWN_TIME - time()) / 60)
-    seconds = int((bonus_timer + COOLDOWN_TIME - time()) % 60)
     if username not in COOLDOWN_IMMUNITY and bonus_timer + COOLDOWN_TIME > time():
-        await reply(f"@{username} {random.choice(messagesTime)} | Balance: {user['balance']} 🍪 | Cooldown: {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
+        cooldown = format_duration(bonus_timer + COOLDOWN_TIME - time())
+        await reply(f"@{username} {random.choice(messagesTime)} | Balance: {user['balance']} 🍪 | Cooldown: {cooldown}")
         return
     
     amount = random.randint(DAILY_MIN, DAILY_MAX)
     roll = random.random()
-      
+
+    # Level-based kek multiplier only boosts what you gain, not what you lose
+    reward = apply_kek_multiplier(user, amount)
+
     if roll < 0.05:
         await reply(
             f"@{username} {random.choice(messagesZero)} | Change: +0 🍪 | Balance: {user['balance']} 🍪"
         )
     elif roll < GAIN_CHANCE:
         await reply(
-            f"@{username} {random.choice(messagesGain)} | Change: +{amount} 🍪 | Balance: {user['balance'] + amount} 🍪"
+            f"@{username} {random.choice(messagesGain)} | Change: +{reward} 🍪 | Balance: {user['balance'] + reward} 🍪"
         )
     else:
         message = random.choice(messagesLose)
@@ -93,8 +91,8 @@ async def cmd_bonus(username, reply, args=None):
         
         
     if roll < GAIN_CHANCE:
-        user["balance"] += amount
-        user["total_claimed"] += amount
+        user["balance"] += reward
+        user["total_claimed"] += reward
     else:
         user["balance"] -= amount
         

@@ -1,6 +1,10 @@
 import json
 from time import time
 
+from config import COMMAND_PREFIX, USER_RESPAWN_TIME
+from utils.duration import format_duration
+from utils.lookup import find_by_name
+
 USERS_FILE = "data/users.json"
 
 def load_users():
@@ -35,7 +39,8 @@ def add_user(username):
             "bonus_timer": 0,
             "total_claimed": 0,
             "steal_timer": 0,
-            "portfolio": []
+            "portfolio": [],
+            "xp": 0
         })
 
         save_users(users)
@@ -72,3 +77,68 @@ def update_last_seen(username, timestamp):
             break
 
     save_users(users)
+
+
+def find_user(users, username):
+    """Case-insensitive lookup of a user dict by username in a list of users."""
+    return find_by_name(users, username, key="username")
+
+
+def get_user_by_name(username, users=None):
+    """Find a user by username (case-insensitive), loading users if not supplied."""
+    return find_user(users if users is not None else load_users(), username)
+
+
+def respawn_remaining(user):
+    """Seconds remaining until `user` respawns (0 if already alive)."""
+    return max(0, user["death_time"] + USER_RESPAWN_TIME - time())
+
+
+async def reply_if_dead(reply, viewer, user, *, is_self=False):
+    """Reply with a death/respawn message if `user` is dead. Returns True if dead."""
+    if user["hp"] > 0:
+        return False
+
+    duration = format_duration(respawn_remaining(user))
+
+    if is_self:
+        await reply(
+            f"@{viewer} You are dead KEKP | You will respawn in {duration}"
+        )
+    else:
+        await reply(
+            f"@{viewer} User '{user['username']}' is dead KEKP | "
+            f"Will respawn in {duration}"
+        )
+
+    return True
+
+
+async def reply_if_not_registered(reply, viewer, user, *, target=None, message=None):
+    """Reply with a registration prompt if `user` is None. Returns True if not registered."""
+    if user is not None:
+        return False
+
+    if message:
+        await reply(message)
+    elif target is None or target.lower() == viewer.lower():
+        await reply(
+            f"@{viewer} You are not registered. "
+            f"Use {COMMAND_PREFIX}kek to register KEKP"
+        )
+    else:
+        await reply(
+            f"@{viewer} User '{target}' is not registered. "
+            f"Use {COMMAND_PREFIX}kek to register KEKP"
+        )
+
+    return True
+
+
+def hp_bar(hp, max_hp=100, width=10):
+    """Render an hp bar of `width` blocks, rounding down at exact half-block values."""
+    step = max_hp // width
+    offset = step // 2 - 1
+    filled = max(0, min(width, (hp + offset) // step))
+
+    return "█" * filled + "░" * (width - filled)

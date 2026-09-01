@@ -1,7 +1,7 @@
 import asyncio
 import logging
 
-from utils.users import load_users, set_user
+from utils.users import hp_bar, load_users, set_user
 from time import time
 from config import USER_RESPAWN_TIME
 
@@ -16,18 +16,18 @@ async def respawn_runner(bot):
                     user["hp"] <= 0
                     and current_time >= user["death_time"] + USER_RESPAWN_TIME
                 ):
-                    user["hp"] = 25
+                    user["hp"] = 20
                     user["death_time"] = 0
 
                     set_user(user["username"], user)
 
                     logging.info(
-                        f"User '{user['username']}' has respawned with 25 HP"
+                        f"User '{user['username']}' has respawned with 20 HP"
                     )
 
                     for channel in bot.connected_channels:
                         await channel.send(
-                            f"@{user['username']} You have respawned with ❤️ 25 KEKP"
+                            f"@{user['username']} respawned KEKP | HP: [{hp_bar(user['hp'])}] 20 | 0 🍪"
                         )
 
         except Exception:

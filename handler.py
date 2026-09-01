@@ -10,6 +10,9 @@ from commands.send import cmd_send
 from commands.steal import cmd_steal
 from commands.stocks import cmd_stocks, cmd_portfolio, cmd_buy, cmd_sell
 from commands.eat import cmd_eat
+from commands.hp import cmd_hp
+from commands.duel import cmd_duel
+from commands.loan import cmd_loan, cmd_repay, cmd_collect, cmd_loans
 
 from config import COMMAND_PREFIX
 from utils.users import update_last_seen
@@ -49,6 +52,16 @@ COMMANDS = {
     "steal": cmd_steal,
     # ---------------------------
     "eat": cmd_eat,
+    "heal": cmd_eat, #? ALIAS
+    # ---------------------------
+    "hp": cmd_hp,
+    # ---------------------------
+    "duel": cmd_duel,
+    # ---------------------------
+    # "loan": cmd_loan,
+    # "repay": cmd_repay,
+    # "collect": cmd_collect,
+    # "loans": cmd_loans,
 }
 
 

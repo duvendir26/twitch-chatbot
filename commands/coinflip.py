@@ -1,8 +1,8 @@
-from time import time
 import random
 
-from config import COMMAND_PREFIX, USER_RESPAWN_TIME
-from utils.users import get_user, load_users, set_user
+from config import COMMAND_PREFIX
+from utils.users import find_user, load_users, reply_if_dead, reply_if_not_registered, set_user
+from utils.amounts import parse_positive_amount
 
 
 async def cmd_coinflip(username, reply, args=None):
@@ -25,44 +25,24 @@ async def cmd_coinflip(username, reply, args=None):
         return
 
     users = load_users()
-    user = next(
-        (
-            user for user in users
-            if user["username"].lower() == username.lower()
-        ),
-    None
-    )
+    user = find_user(users, username)
 
-    if not user:
-        await reply(
-            f"@{username} You are not registered. "
-            f"Use $kek to register KEKP"
-        )
+    if await reply_if_not_registered(reply, username, user):
         return
     
-    if user["hp"] <= 0:
-        hours = int((user["death_time"] + USER_RESPAWN_TIME - time()) / 3600)
-        minutes = int((user["death_time"] + USER_RESPAWN_TIME - time()) % 3600 / 60)
-        seconds = int((user["death_time"] + USER_RESPAWN_TIME - time()) % 60)
-        
-        await reply(f"@{username} You are dead KEKP | You will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
+    if await reply_if_dead(reply, username, user, is_self=True):
         return
 
-    if args[1].lower() == "all":
-        amount = user["balance"]
-    else:
-        try:
-            amount = int(args[1])
-        except ValueError:
-            await reply(
-                f"@{username} Enter a valid number KEKP"
-            )
-            return
-
-    if amount <= 0:
-        await reply(
-            f"@{username} You cannot bet 0 or a negative amount 🍪 KEKWhat"
-        )
+    amount = await parse_positive_amount(
+        reply,
+        username,
+        args[1],
+        allow_all=True,
+        all_amount=user["balance"],
+        invalid_message=f"@{username} Enter a valid number KEKP",
+        zero_message=f"@{username} You cannot bet 0 or a negative amount 🍪 KEKWhat",
+    )
+    if amount is None:
         return
 
     if amount > user["balance"]:

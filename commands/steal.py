@@ -1,8 +1,9 @@
 import random
 import time
 
-from utils.users import load_users, set_user
-from config import USER_RESPAWN_TIME
+from utils.users import find_user, load_users, reply_if_dead, reply_if_not_registered, set_user
+from utils.duration import format_duration
+from utils.xp import add_xp, apply_kek_multiplier
 
 
 SUCCESS_RATE = 0.35
@@ -10,6 +11,7 @@ SUCCESS_RATE = 0.35
 MIN_STEAL_BALANCE = 10
 STEAL_COOLDOWN = 30 * 60
 ACTIVE_TIME_LIMIT = 15 * 60
+STEAL_XP_REWARD = 25
 
 COOLDOWN_IMMUNITY = ["the_kekbot"]  # Testing
 
@@ -37,19 +39,9 @@ async def cmd_steal(username, reply, args=None):
     # FIND THIEF
     # ---------------------------------------------------------
     
-    user = next(
-        (
-            user for user in users
-            if user["username"].lower() == username.lower()
-        ),
-        None
-    )
+    user = find_user(users, username)
 
-    if not user:
-        await reply(
-            f"@{username} You are not registered. "
-            f"Use $kek to register KEKP"
-        )
+    if await reply_if_not_registered(reply, username, user):
         return
 
     # ---------------------------------------------------------
@@ -57,21 +49,7 @@ async def cmd_steal(username, reply, args=None):
     # ---------------------------------------------------------
     
     current_time = int(time.time())
-    if user["hp"] <= 0:
-        respawn_time = user["death_time"] + USER_RESPAWN_TIME
-        remaining = max(0, respawn_time - current_time)
-
-        hours = remaining // 3600
-        minutes = (remaining % 3600) // 60
-        seconds = remaining % 60
-
-        await reply(
-            f"@{username} You are dead KEKP | "
-            f"You will respawn in "
-            f"{f'{hours}h ' if hours else ''}"
-            f"{f'{minutes}m ' if minutes else ''}"
-            f"{seconds}s"
-        )
+    if await reply_if_dead(reply, username, user, is_self=True):
         return
 
     # ---------------------------------------------------------
@@ -94,16 +72,11 @@ async def cmd_steal(username, reply, args=None):
         current_time < steal_timer
         and username.lower() not in COOLDOWN_IMMUNITY
     ):
-        remaining = steal_timer - current_time
-
-        minutes = remaining // 60
-        seconds = remaining % 60
+        cooldown = format_duration(steal_timer - current_time)
 
         await reply(
             f"@{username} You need to wait before stealing again KEKP "
-            f"| Cooldown: "
-            f"{f'{minutes}m ' if minutes else ''}"
-            f"{seconds}s"
+            f"| Cooldown: {cooldown}"
         )
         return
 
@@ -111,19 +84,12 @@ async def cmd_steal(username, reply, args=None):
     # FIND TARGET
     # ---------------------------------------------------------
 
-    target_user = next(
-        (
-            user for user in users
-            if user["username"].lower() == target_username.lower()
-        ),
-        None
-    )
+    target_user = find_user(users, target_username)
 
-    if not target_user:
-        await reply(
-            f"@{username} User '{target_username}' "
-            f"not found (didn't use $kek) KEKP"
-        )
+    if await reply_if_not_registered(
+        reply, username, target_user,
+        message=f"@{username} User '{target_username}' not found (didn't use $kek) KEKP"
+    ):
         return
 
     # Can't steal from bot
@@ -137,21 +103,7 @@ async def cmd_steal(username, reply, args=None):
     # TARGET: DEAD CHECK
     # ---------------------------------------------------------
 
-    if target_user["hp"] <= 0:
-        respawn_time = target_user["death_time"] + USER_RESPAWN_TIME
-        remaining = max(0, respawn_time - current_time)
-
-        hours = remaining // 3600
-        minutes = (remaining % 3600) // 60
-        seconds = remaining % 60
-
-        await reply(
-            f"@{username} User '{target_user['username']}' is dead KEKP | "
-            f"Will respawn in "
-            f"{f'{hours}h ' if hours else ''}"
-            f"{f'{minutes}m ' if minutes else ''}"
-            f"{seconds}s"
-        )
+    if await reply_if_dead(reply, username, target_user, is_self=False):
         return
 
     # ---------------------------------------------------------
@@ -221,7 +173,9 @@ async def cmd_steal(username, reply, args=None):
             target_user["hp"] = 0
             target_user["death_time"] = current_time
 
-            user["balance"] += dropped_keks
+            add_xp(user, STEAL_XP_REWARD)
+            reward = apply_kek_multiplier(user, dropped_keks)
+            user["balance"] += reward
 
             set_user(target_user["username"], target_user)
             set_user(user["username"], user)
@@ -229,13 +183,16 @@ async def cmd_steal(username, reply, args=None):
             await reply(
                 f"@{username} Deals {damage} damage to "
                 f"{target_user['username']}, killing them and "
-                f"taking all +{dropped_keks} 🍪 KEKP"
+                f"taking all +{reward} 🍪 KEKP"
             )
 
         # TARGET SURVIVES
         else:
             target_user["balance"] -= amount
-            user["balance"] += amount
+
+            add_xp(user, STEAL_XP_REWARD)
+            reward = apply_kek_multiplier(user, amount)
+            user["balance"] += reward
 
             set_user(target_user["username"], target_user)
             set_user(user["username"], user)
@@ -243,7 +200,7 @@ async def cmd_steal(username, reply, args=None):
             await reply(
                 f"@{username} Deals {damage} damage to "
                 f"{target_user['username']}, knocking them out and "
-                f"steals +{amount} 🍪 KEKP"
+                f"steals +{reward} 🍪 KEKP"
             )
 
     # ---------------------------------------------------------

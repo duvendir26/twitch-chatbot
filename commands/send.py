@@ -1,6 +1,6 @@
-from time import time
-from config import COMMAND_PREFIX, USER_RESPAWN_TIME
-from utils.users import load_users, set_user
+from config import COMMAND_PREFIX
+from utils.users import find_user, load_users, reply_if_dead, reply_if_not_registered, set_user
+from utils.amounts import parse_positive_amount
 
 
 async def cmd_send(username, reply, args=None):
@@ -18,42 +18,20 @@ async def cmd_send(username, reply, args=None):
 
     users = load_users()
 
-    user = next(
-        (
-            u for u in users
-            if u["username"].lower() == username.lower()
-        ),
-        None
-    )
+    user = find_user(users, username)
 
-    if not user:
-        await reply(
-            f"@{username} You are not registered. "
-            f"Use $kek to register KEKP"
-        )
+    if await reply_if_not_registered(reply, username, user):
         return
     
-    if user["hp"] <= 0:
-        hours = int((user["death_time"] + USER_RESPAWN_TIME - time()) / 3600)
-        minutes = int((user["death_time"] + USER_RESPAWN_TIME - time()) % 3600 / 60)
-        seconds = int((user["death_time"] + USER_RESPAWN_TIME - time()) % 60)
-        
-        await reply(f"@{username} You are dead KEKP | You will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
+    if await reply_if_dead(reply, username, user, is_self=True):
         return
 
-    recipient_user = next(
-        (
-            u for u in users
-            if u["username"].lower() == recipient.lower()
-        ),
-        None
-    )
+    recipient_user = find_user(users, recipient)
 
-    if not recipient_user:
-        await reply(
-            f"@{username} User is not registered "
-            f"(has to use $kek) wideKEKA"
-        )
+    if await reply_if_not_registered(
+        reply, username, recipient_user,
+        message=f"@{username} User is not registered (has to use $kek) wideKEKA"
+    ):
         return
 
     if user["username"].lower() == recipient_user["username"].lower():
@@ -62,31 +40,19 @@ async def cmd_send(username, reply, args=None):
         )
         return
     
-    if recipient_user["hp"] <= 0:
-        hours = int((recipient_user["death_time"] + USER_RESPAWN_TIME - time()) / 3600)
-        minutes = int((recipient_user["death_time"] + USER_RESPAWN_TIME - time()) % 3600 / 60)
-        seconds = int((recipient_user["death_time"] + USER_RESPAWN_TIME - time()) % 60)
-        
-        await reply(f"@{username} User '{recipient_user['username']}' is dead KEKP | Will respawn in {str(hours) + 'h' if hours != 0 else ''} {str(minutes) + 'm' if minutes != 0 else ''} {seconds}s")
+    if await reply_if_dead(reply, username, recipient_user, is_self=False):
         return
 
-    if amount_arg == "all":
-        amount = user["balance"]
-
-    else:
-        try:
-            amount = int(amount_arg)
-        except ValueError:
-            await reply(
-                f"@{username} Invalid amount. "
-                f"Please enter a valid number or 'all' KEKP"
-            )
-            return
-
-    if amount <= 0:
-        await reply(
-            f"@{username} Amount must be greater than zero KEKP"
-        )
+    amount = await parse_positive_amount(
+        reply,
+        username,
+        amount_arg,
+        allow_all=True,
+        all_amount=user["balance"],
+        invalid_message=f"@{username} Invalid amount. Please enter a valid number or 'all' KEKP",
+        zero_message=f"@{username} Amount must be greater than zero KEKP",
+    )
+    if amount is None:
         return
 
     if user["balance"] < amount:
