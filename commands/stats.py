@@ -74,9 +74,10 @@ async def cmd_stats(username, reply, args=None):
         f"HP: {blocks_display} [{user['hp']}/100] | "
         f"{respawn_text}"
         f"XP: {xp_bar_display} [{xp_text}] | "
-        f"Level: {level} / 30 (+{bonus} keks) | "
+        f"Level: {level} / 30 | "
         f"Duel wins: {user['duel_wins']} | "
         f"Duel losses: {user['duel_losses']} | "
+        f"Duel winrate: {user['duel_wins'] / (user['duel_wins'] + user['duel_losses']) * 100 if (user['duel_wins'] + user['duel_losses']) > 0 else 0:.2f}% | "
         f"Balance: {user['balance']} 🍪 | "
         f"{bonus_timer} | "
         f"{steal_timer} | "
@@ -84,7 +85,4 @@ async def cmd_stats(username, reply, args=None):
         f"Coinflip winrate: {user['coinflip_wins'] / (user['coinflip_wins'] + user['coinflip_losses']) * 100 if (user['coinflip_wins'] + user['coinflip_losses']) > 0 else 0:.2f}%"
     )
     
-
-
-
     await reply(stats_message)
