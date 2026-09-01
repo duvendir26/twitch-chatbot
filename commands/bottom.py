@@ -12,7 +12,7 @@ async def cmd_bottom(username, reply, args=None):
             reverse=False
         )
 
-    leaderboard_message = "Bottom 10 users: "
+    leaderboard_message = "10 poorest kekkers KEK7 : "
     for i, user in enumerate(sorted_users[:10], start=1):
         separator = "" if i == 1 else " | "
         

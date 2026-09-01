@@ -182,7 +182,7 @@ async def cmd_buy(username, reply, args=None):
 
     set_user(user["username"], user)
     
-    portfolio_text = " | ".join(
+    portfolio_text = ", ".join(
         f"{item['name']}: {item['amount']} "
         f"{'share' if item['amount'] == 1 else 'shares'}"
         for item in portfolio
@@ -281,7 +281,7 @@ async def cmd_sell(username, reply, args=None):
 
     set_user(user["username"], user)
     
-    portfolio_text = " | ".join(
+    portfolio_text = ", ".join(
         f"{item['name']}: {item['amount']} "
         f"{'share' if item['amount'] == 1 else 'shares'}"
         for item in portfolio

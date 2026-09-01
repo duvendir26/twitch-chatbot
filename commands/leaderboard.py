@@ -12,7 +12,7 @@ async def cmd_leaderboard(username, reply, args=None):
         reverse=True
     )
 
-    leaderboard_message = "Top 10 users: "
+    leaderboard_message = "Top 10 kekkers KEKInsane : "
     for i, user in enumerate(sorted_users[:10], start=1):
         separator = "" if i == 1 else " | "
         
