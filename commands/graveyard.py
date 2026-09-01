@@ -19,4 +19,4 @@ async def cmd_graveyard(username, reply, args=None):
         for user in dead_users
     )
 
-    await reply(f"@{username} Graveyard: {graveyard_list}")
+    await reply(f"@{username} Graveyard KEKP : {graveyard_list}")

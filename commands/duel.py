@@ -107,8 +107,7 @@ async def cmd_duel(username, reply, args=None):
 
     if amount > opponent["balance"]:
         await reply(
-            f"@{username} {opponent['username']} doesn't have enough 🍪 "
-            f"to cover that wager KEKScreen"
+            f"@{username} {opponent['username']} doesn't have enough 🍪 KEKScreen"
         )
         return
 
@@ -166,14 +165,6 @@ async def cmd_accept(username, reply, args=None):
         )
         return
 
-    if len(pending) > 1:
-        challengers = ", ".join(r["challenger"] for r in pending)
-        await reply(
-            f"@{username} You have multiple duel challenges, use "
-            f"{COMMAND_PREFIX}accept <challenger> to pick one: {challengers} KEKP"
-        )
-        return
-
     request = pending[0]
     duel_requests.remove(request)
 
@@ -197,14 +188,13 @@ async def cmd_accept(username, reply, args=None):
 
     if amount > challenger["balance"]:
         await reply(
-            f"@{username} {challenger['username']} no longer has enough 🍪 "
-            f"to cover that wager KEKScreen"
+            f"@{username} {challenger['username']} no longer has enough 🍪 KEKScreen"
         )
         return
 
     if amount > opponent["balance"]:
         await reply(
-            f"@{username} You no longer have enough 🍪 to cover that wager KEKScreen"
+            f"@{username} You no longer have enough 🍪 KEKScreen"
         )
         return
 
@@ -259,8 +249,8 @@ async def _resolve_duel(challenger, opponent, amount, reply):
         set_user(opponent["username"], opponent)
 
         await reply(
-            f"@{winner['username']} wins the duel. Dealt {damage} damage{bonus_text} to {loser['username']}, "
-            f"killing them | Change: +{dropped_keks} 🍪 | XP Gain: +{gained_xp} XP"
+            f"@{winner['username']} wins the duel dealing {damage} damage{bonus_text} to {loser['username']}, "
+            f"killing them KEK7 | Change: +{dropped_keks} 🍪 | XP Gain: +{gained_xp} XP"
         )
     else:
         winner["balance"] += amount
@@ -270,6 +260,6 @@ async def _resolve_duel(challenger, opponent, amount, reply):
         set_user(opponent["username"], opponent)
 
         await reply(
-            f"@{winner['username']} wins the duel. Dealt {damage} damage{bonus_text} to {loser['username']} "
-            f"| Change: +{amount} 🍪 | XP Gain: +{gained_xp} XP"
+            f"@{winner['username']} wins the duel dealing {damage} damage{bonus_text} to {loser['username']} "
+            f"| Change: +{amount} 🍪 KEKShook | XP Gain: +{gained_xp} XP"
         )

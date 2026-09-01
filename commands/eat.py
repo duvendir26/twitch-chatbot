@@ -101,7 +101,7 @@ async def cmd_eat(username, reply, args=None):
         )
     else:
         await reply(
-            f"@{username} Healed {target['username']} | "
+            f"@{username} Healed {target['username']} YouCanEatThem | "
             f"Change: -{total_price} 🍪 (you) | Heal amount: +{heal_amount} | "
             f"{target['username']}'s HP: [{hp_bar(target['hp'])}] [{target['hp']}]"
         )

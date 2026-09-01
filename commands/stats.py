@@ -81,8 +81,7 @@ async def cmd_stats(username, reply, args=None):
         f"{bonus_timer} | "
         f"{steal_timer} | "
         f"Total claimed: {user['total_claimed']} 🍪 | "
-        f"Coinflip winrate: {user['coinflip_wins'] / (user['coinflip_wins'] + user['coinflip_losses']) * 100 if (user['coinflip_wins'] + user['coinflip_losses']) > 0 else 0:.2f}% | "
-        f"Portfolio: {', '.join([f'{item['name']}: {item['amount']} shares' for item in user['portfolio']])}"
+        f"Coinflip winrate: {user['coinflip_wins'] / (user['coinflip_wins'] + user['coinflip_losses']) * 100 if (user['coinflip_wins'] + user['coinflip_losses']) > 0 else 0:.2f}%"
     )
     
 

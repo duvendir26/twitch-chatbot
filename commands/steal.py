@@ -182,8 +182,8 @@ async def cmd_steal(username, reply, args=None):
             await reply(
                 f"@{username} Deals {damage} damage to "
                 f"{target_user['username']}, killing them and "
-                f"taking all | Change: +{dropped_keks} 🍪 | "
-                f"XP Gain: +{gained_xp} XP KEKP"
+                f"taking all keks KEK7 | Change: +{dropped_keks} 🍪 | "
+                f"XP Gain: +{gained_xp} XP"
             )
 
         # TARGET SURVIVES
@@ -199,8 +199,8 @@ async def cmd_steal(username, reply, args=None):
             await reply(
                 f"@{username} Deals {damage} damage to "
                 f"{target_user['username']}, knocking them out and "
-                f"steals keks | Change: +{amount} 🍪 | "
-                f"XP Gain: +{gained_xp} XP KEKP"
+                f"steals some keks KEKFinger | Change: +{amount} 🍪 | "
+                f"XP Gain: +{gained_xp} XP"
             )
 
     # ---------------------------------------------------------
@@ -239,8 +239,8 @@ async def cmd_steal(username, reply, args=None):
 
             await reply(
                 f"@{username} Got caught stealing from "
-                f"{target_user['username']}, took -{damage} damage and died, "
-                f"dropping all keks | Change: -{dropped_keks + penalty} 🍪 KEKP"
+                f"{target_user['username']}, took {damage} damage and died, "
+                f"dropping all keks KEK7 | Change: -{dropped_keks + penalty} 🍪"
             )
 
         # THIEF SURVIVES
@@ -249,6 +249,6 @@ async def cmd_steal(username, reply, args=None):
 
             await reply(
                 f"@{username} Got caught stealing from "
-                f"{target_user['username']}, took -{damage} damage "
-                f"and lost keks | Change: -{penalty} 🍪 KEKP"
+                f"{target_user['username']}, took {damage} damage "
+                f"and lost some keks KEKScreen | Change: -{penalty} 🍪"
             )

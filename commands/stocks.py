@@ -18,7 +18,7 @@ async def cmd_stocks(username, reply, args=None):
         [f"{stock['name']}: {stock['price']} 🍪" for stock in stocks]
     )
 
-    await reply(f"@{username} Stocks: {stock_list}")
+    await reply(f"@{username} Available stocks wideKEKA : {stock_list}")
 
 
 async def cmd_portfolio(username, reply, args=None):
@@ -191,7 +191,7 @@ async def cmd_buy(username, reply, args=None):
 
     await reply(
         f"@{username} Bought {amount} "
-        f"{'share' if amount == 1 else 'shares'} of {stock['name']} "
+        f"{'share' if amount == 1 else 'shares'} of {stock['name']} wideKEKA "
         f"| Change: -{total_cost} 🍪 | "
         f"Balance: {user['balance']} 🍪 | "
         f"Portfolio: {portfolio_text}"
@@ -293,7 +293,7 @@ async def cmd_sell(username, reply, args=None):
 
     await reply(
         f"@{username} Sold {amount} "
-        f"{'share' if amount == 1 else 'shares'} of {stock['name']} "
+        f"{'share' if amount == 1 else 'shares'} of {stock['name']} wideKEKA "
         f"| Change: +{total_value} 🍪 | "
         f"Balance: {user['balance']} 🍪 | "
         f"Portfolio: {portfolio_text}"

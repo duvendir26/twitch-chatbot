@@ -12,7 +12,7 @@ async def cmd_convert(username, reply, args=None):
         await reply(
             f"@{username} Usage: "
             f"{COMMAND_PREFIX}convert <xp amount|all> "
-            f"({XP_PER_KEK} xp -> 1 🍪, one-way only)"
+            f"({XP_PER_KEK} XP -> 1 🍪)"
         )
         return
 
