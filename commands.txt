@@ -18,7 +18,7 @@ $stocks (aliases: $price, $prices)
 $portfolio
 
 $buy <stock> <amount|all>
-- Max 100 shares per stock
+  Max 100 shares per stock
 
 $sell <stock> <amount|all>
 
@@ -38,8 +38,11 @@ $eat <amount|full> or $heal <user> <amount|full> (alias: $heal)
 $hp <user (optional)>
   Show your or another player's HP bar.
 
+$res <user>
+  Resurrect another player. Costs 500 keks.
+
 $xp <user (optional)> (alias: $level)
-  Show level, XP bar/progress, and current kek bonus per gain.
+  Show your or another player's XP bar.
 
 $convert <xp amount|all>
   Convert XP into keks (10 xp = 1 kek).

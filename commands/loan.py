@@ -8,7 +8,9 @@
 # There is also a command to see your loans and for people to see how much they are owed 
 # so commands loan, repay, collect, loans (shows both your loans and loans owed to you)
 
+import json
 from time import time
+
 
 from config import COMMAND_PREFIX
 from utils.users import find_user, load_users, reply_if_dead, reply_if_not_registered, set_user
