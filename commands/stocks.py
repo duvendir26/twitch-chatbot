@@ -310,3 +310,51 @@ def update_stock_prices():
         )
 
     save_stocks(stocks)
+
+
+async def cmd_holders(username, reply, args=None):
+    print(f"@{username} requested holders command with args: {args}")
+
+    args = args or []
+
+    if not args:
+        await reply(
+            f"@{username} Usage: {COMMAND_PREFIX}holders <stock_name>"
+        )
+        return
+
+    stock_name = args[0].lower()
+    stocks = load_stocks()
+    stock = find_by_name(stocks, stock_name)
+
+    if stock is None:
+        await reply(
+            f"@{username} Stock '{stock_name}' does not exist KEKP"
+        )
+        return
+
+    users = load_users()
+    holders = []
+
+    for user in users:
+        owned_stock = find_by_name(user.get("portfolio", []), stock["name"])
+
+        if owned_stock and owned_stock.get("amount", 0) > 0:
+            holders.append((user["username"], owned_stock["amount"]))
+
+    if not holders:
+        await reply(
+            f"@{username} No one holds {stock['name']} KEKP"
+        )
+        return
+
+    holders.sort(key=lambda holder: holder[1], reverse=True)
+
+    holders_text = " | ".join(
+        f"{holder_username}: {amount} {'share' if amount == 1 else 'shares'}"
+        for holder_username, amount in holders[:10]
+    )
+
+    await reply(
+        f"@{username} Holders of {stock['name']}: {holders_text}"
+    )

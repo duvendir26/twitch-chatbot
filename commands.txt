@@ -1,0 +1,144 @@
+
+#############
+### RULES ###
+#############
+Prefix: 
+- '$' 
+- For example '$kek'
+
+HEALTH:
+- Start with 100 HP. When HP reaches 0, you die for 3 hours (you can only view your stats, portfolio, hp and xp).
+- Dying to $steal or $duel: lose ALL keks to the attacker.
+- When you respawn your HP back to 25.
+
+ACTIVITY:
+- You cannot be targeted by $steal/$duel if inactive 15+ minutes.
+- Activity = any message sent to chat. Timer resets each message.
+
+CURRENCY and LEVELING:
+- Keks (🍪): spent on $eat (5 keks per HP), $buy stocks, $duel wagering.
+- Keks gained from: $bonus (daily), $coinflip (win), $steal (success, 35% rate), $duel (win).
+- XP gained only from $steal (+25) and $duel win (+50). Not from $bonus.
+- Leveling: 1000 XP per level, max level 30.
+- Keks Bonus: +1 kek per level. Level 1 = +1 kek, Level 10 = +10 keks, etc.
+  Applies to $bonus gains and $steal loot only (not $duel wagers or losses).
+- Example: Level 3 stealing 100 keks = 103 keks gained.
+
+COMBAT BASICS
+- Damage roll: 1 to min(10, target_hp) HP.
+- Level advantage: ~+0.3% win chance per level difference (±15% cap), +2% damage bonus per level (+30% cap).
+
+STEAL
+- Command: $steal <target> (no amount).
+- Needs: 10+ keks, target active, no cooldown active.
+- Success (35%): Deal damage, gain XP, take their keks (all if they die).
+- Failure (65%): Take damage, lose keks, no XP.
+- Cooldown: 30 min (win or lose).
+
+DUEL
+- Command: $duel <target> <amount> (creates challenge).
+- Opponent must type $accept within 60 sec (or $accept <your_name> if multiple pending).
+- Needs: Both alive, both have wager amount, target active.
+- Outcome: Coin flip (skewed by level), random damage to loser.
+- If loser HP ≤ 0: dies, loses all keks. Otherwise: loses wager amount.
+- Both gain +50 XP (winner only).
+- Win/loss tracked in stats.
+
+BONUS DAILY
+- Command: $kek (or $bonus). Cooldown: 30 min.
+- Outcome: 5% nothing, ~75% gain 1-30 keks (plus level bonus), ~20% lose 1-30 keks (no bonus).
+
+OTHER MECHANICS
+- $send: Transfer keks to another player (no cooldown, no bonus).
+- $coinflip: 50/50 bet (no bonus).
+- $eat: Spend 5 keks per HP to heal self or another player (you pay).
+- $stocks/$buy/$sell: No bonus on stock transactions.
+- $convert: Turn XP into keks (10 xp → 1 kek, one-way). Lowers your level.
+
+#######################
+### GETTING STARTED ###
+#######################
+
+$kek (alias: $bonus)
+  Claim your daily reward. Registers you the first time you use it.
+  Cooldown: 30 min. Most of the time you gain keks, sometimes you get 0,
+  and sometimes you lose keks (occasionally to a random other player).
+
+######################
+### OTHER COMMANDS ###
+######################
+
+$send <user> <amount|all> (aliases: $sendkeks, $give, $givekeks)
+  Send keks to another player. Can't send to yourself or a dead player.
+
+$coinflip <heads|tails> <amount|all>
+  Bet keks on a 50/50 coin flip.
+
+$stocks (aliases: $price, $prices)
+  List all stocks and their current price.
+
+$portfolio
+  Show the stocks you own and their total value.
+
+$buy <stock> <amount|all>
+  Buy shares of a stock (max 100 shares per stock).
+
+$sell <stock> <amount|all>
+  Sell shares of a stock.
+
+$holders <stock>
+  List who owns a stock and how many shares
+
+$steal <user>
+  Try to steal keks from another player. Costs nothing to attempt, but:
+  - You need at least 10 keks to attempt a steal.
+  - The target must have been active in the last 15 minutes.
+  - 30 min cooldown between attempts, win or lose.
+  - On success (35% rate) you deal damage, gain XP, and take their keks
+    (all of it if the damage kills them). On failure you take damage and
+    lose keks instead, with no XP gained
+
+$duel <user> <amount>
+  Challenge another player to a duel for a kek wager. The target must have
+  been active in the last 15 minutes. This only creates a challenge - the
+  target has to type $accept to actually fight. The challenge expires
+  after 60 seconds if not accepted.
+
+$accept <challenger (optional)>
+  Accept a pending duel challenge sent to you. If you have more than one
+  pending challenge, specify who you're accepting, e.g. $accept alice.
+  The fight is a coin flip skewed slightly by level (higher level = small
+  edge in win chance and damage) and deals random damage to the loser.
+  If the loser's HP hits 0 they die and drop all their keks to the winner,
+  otherwise the winner just takes the wager. Both fighters must be alive
+  and able to cover the wager at accept time.
+
+$eat <amount|full> or $eat <user> <amount|full> (alias: $heal)
+  Heal HP by spending keks (5 keks per HP). Without a target you heal
+  yourself; with a target you pay to heal someone else instead.
+
+$hp <user (optional)>
+  Show HP bar for yourself or another player.
+
+$xp <user (optional)> (alias: $level)
+  Show level, XP bar/progress, and current kek bonus per gain.
+
+$convert <xp amount|all>
+  Convert XP into keks, one-way only (10 xp -> 1 kek). Lowering your XP
+  can lower your level and kek bonus, so spend it deliberately.
+
+$stats <user (optional)> (alias: $keks)
+  Full stat summary: HP, respawn timer, level/XP, duel wins/losses,
+  balance, bonus/steal cooldowns, coinflip stats, and portfolio.
+
+$leaderboard (aliases: $top, $kekkers)
+  Top 10 richest players.
+
+$bottom
+  Bottom 10 poorest players.
+
+$graveyard
+  List all dead players and how long until each one respawns.
+
+$commands
+  Link to the full commands list.

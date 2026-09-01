@@ -1,4 +1,6 @@
+import asyncio
 import json
+import os
 from time import time
 
 from config import COMMAND_PREFIX, USER_RESPAWN_TIME
@@ -7,14 +9,22 @@ from utils.lookup import find_by_name
 
 USERS_FILE = "data/users.json"
 
+# Serializes read-modify-write access to USERS_FILE so concurrent commands
+# (or the respawn runner) can't clobber each other's changes with stale data.
+users_lock = asyncio.Lock()
+
 def load_users():
     with open(USERS_FILE, "r") as f:
         return json.load(f)
 
 
 def save_users(users):
-    with open(USERS_FILE, "w") as f:
+    # Write to a temp file then atomically replace, so a concurrent load_users()
+    # can never observe a half-written/truncated file.
+    tmp_path = f"{USERS_FILE}.tmp"
+    with open(tmp_path, "w") as f:
         json.dump(users, f, indent=4)
+    os.replace(tmp_path, USERS_FILE)
 
 
 def add_user(username):
@@ -141,4 +151,19 @@ def hp_bar(hp, max_hp=100, width=10):
     offset = step // 2 - 1
     filled = max(0, min(width, (hp + offset) // step))
 
+    return "█" * filled + "░" * (width - filled)
+
+
+def xp_bar(xp, width=10):
+    """Render an xp progress bar toward next level, or full bar if maxed."""
+    from utils.xp import get_xp_progress
+    progress, needed = get_xp_progress(xp)
+    
+    if needed == 0:  # Maxed out at MAX_LEVEL
+        return "█" * width
+    
+    step = needed // width
+    offset = step // 2 - 1
+    filled = max(0, min(width, (progress + offset) // step))
+    
     return "█" * filled + "░" * (width - filled)

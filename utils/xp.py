@@ -1,24 +1,36 @@
 XP_PER_LEVEL = 1000
 MAX_LEVEL = 30
-KEK_MULTIPLIER_PER_LEVEL = 0.05  # +5% keks earned per level, tune to taste
+XP_PER_KEK = 10  # $convert rate: 10 xp -> 1 kek, one-way only
 
 
 def get_level(xp):
-    """Player level based on xp, capped at MAX_LEVEL."""
-    return min(xp // XP_PER_LEVEL, MAX_LEVEL)
+    """Player level based on xp, capped at MAX_LEVEL. Starts at level 1 (0-999 xp)."""
+    return min(xp // XP_PER_LEVEL + 1, MAX_LEVEL)
 
 
-def get_kek_multiplier(level):
-    """Kek reward multiplier for a given level (1.0 = no bonus)."""
-    return 1 + level * KEK_MULTIPLIER_PER_LEVEL
+def get_kek_bonus(level):
+    """Flat kek bonus per level: +1 at level 1, +2 at level 2, etc."""
+    return level
 
 
 def add_xp(user, amount):
-    """Add xp to `user` in place, capping at the xp needed for MAX_LEVEL."""
-    user["xp"] = min(user.get("xp", 0) + amount, XP_PER_LEVEL * MAX_LEVEL)
+    """Add xp to `user` in place, capping at the xp needed for MAX_LEVEL. Returns the amount actually gained."""
+    before = user.get("xp", 0)
+    user["xp"] = min(before + amount, XP_PER_LEVEL * MAX_LEVEL)
+    return user["xp"] - before
 
 
 def apply_kek_multiplier(user, amount):
-    """Scale a kek reward by `user`'s level-based multiplier, rounded to an int."""
+    """Add level-based flat bonus keks to reward."""
     level = get_level(user.get("xp", 0))
-    return round(amount * get_kek_multiplier(level))
+    return amount + get_kek_bonus(level)
+
+
+def get_xp_progress(xp):
+    """Progress (current, needed) toward the next level; needed=0 once MAX_LEVEL is reached."""
+    level = get_level(xp)
+    if level >= MAX_LEVEL:
+        return 0, 0
+
+    return xp - (level - 1) * XP_PER_LEVEL, XP_PER_LEVEL
+

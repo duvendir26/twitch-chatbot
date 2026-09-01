@@ -3,7 +3,7 @@ import time
 
 from utils.users import find_user, load_users, reply_if_dead, reply_if_not_registered, set_user
 from utils.duration import format_duration
-from utils.xp import add_xp, apply_kek_multiplier
+from utils.xp import add_xp
 
 
 SUCCESS_RATE = 0.35
@@ -173,9 +173,8 @@ async def cmd_steal(username, reply, args=None):
             target_user["hp"] = 0
             target_user["death_time"] = current_time
 
-            add_xp(user, STEAL_XP_REWARD)
-            reward = apply_kek_multiplier(user, dropped_keks)
-            user["balance"] += reward
+            gained_xp = add_xp(user, STEAL_XP_REWARD)
+            user["balance"] += dropped_keks
 
             set_user(target_user["username"], target_user)
             set_user(user["username"], user)
@@ -183,16 +182,16 @@ async def cmd_steal(username, reply, args=None):
             await reply(
                 f"@{username} Deals {damage} damage to "
                 f"{target_user['username']}, killing them and "
-                f"taking all +{reward} 🍪 KEKP"
+                f"taking all | Change: +{dropped_keks} 🍪 | "
+                f"XP Gain: +{gained_xp} XP KEKP"
             )
 
         # TARGET SURVIVES
         else:
             target_user["balance"] -= amount
 
-            add_xp(user, STEAL_XP_REWARD)
-            reward = apply_kek_multiplier(user, amount)
-            user["balance"] += reward
+            gained_xp = add_xp(user, STEAL_XP_REWARD)
+            user["balance"] += amount
 
             set_user(target_user["username"], target_user)
             set_user(user["username"], user)
@@ -200,7 +199,8 @@ async def cmd_steal(username, reply, args=None):
             await reply(
                 f"@{username} Deals {damage} damage to "
                 f"{target_user['username']}, knocking them out and "
-                f"steals +{reward} 🍪 KEKP"
+                f"steals keks | Change: +{amount} 🍪 | "
+                f"XP Gain: +{gained_xp} XP KEKP"
             )
 
     # ---------------------------------------------------------
@@ -240,7 +240,7 @@ async def cmd_steal(username, reply, args=None):
             await reply(
                 f"@{username} Got caught stealing from "
                 f"{target_user['username']}, took -{damage} damage and died, "
-                f"dropping all -{dropped_keks + penalty} 🍪 KEKP"
+                f"dropping all keks | Change: -{dropped_keks + penalty} 🍪 KEKP"
             )
 
         # THIEF SURVIVES
@@ -250,5 +250,5 @@ async def cmd_steal(username, reply, args=None):
             await reply(
                 f"@{username} Got caught stealing from "
                 f"{target_user['username']}, took -{damage} damage "
-                f"and lost -{penalty} 🍪 KEKP"
+                f"and lost keks | Change: -{penalty} 🍪 KEKP"
             )

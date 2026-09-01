@@ -1,4 +1,4 @@
-from utils.users import find_user, load_users, reply_if_dead, reply_if_not_registered, set_user
+from utils.users import find_user, hp_bar, load_users, reply_if_dead, reply_if_not_registered, set_user
 from utils.amounts import parse_positive_amount
 from config import COMMAND_PREFIX
 
@@ -8,7 +8,7 @@ MAX_HP = 100
 
 def _usage(username):
     return (
-        f"@{username} Usage: {COMMAND_PREFIX}heal (or {COMMAND_PREFIX}eat) <user (optional)> <amount | full> "
+        f"@{username} Usage: {COMMAND_PREFIX}heal (or {COMMAND_PREFIX}eat) <user (optional)> <hp amount | full> "
         f"({HEAL_PRICE} 🍪 per HP) KEKP"
     )
 
@@ -75,18 +75,18 @@ async def cmd_eat(username, reply, args=None):
     if amount is None:
         return
 
-    # Calculate total cost
-    total_price = amount * HEAL_PRICE
+    heal_amount = min(amount, MAX_HP - target["hp"])
+    total_price = heal_amount * HEAL_PRICE
 
     if payer["balance"] < total_price:
         await reply(
-            f"@{username} You don't have enough 🍪 to heal {amount} HP. "
+            f"@{username} You don't have enough 🍪 to heal {heal_amount} HP. "
             f"You need {total_price} 🍪 KEKP"
         )
         return
 
     # Heal and charge
-    target["hp"] += amount
+    target["hp"] += heal_amount
     payer["balance"] -= total_price
 
     set_user(payer["username"], payer)
@@ -96,13 +96,13 @@ async def cmd_eat(username, reply, args=None):
     if is_self:
         await reply(
             f"@{username} YouCanEatThem | "
-            f"Change: -{total_price} 🍪, +{amount} ❤️ | "
-            f"Current HP: ❤️ {target['hp']}"
+            f"Change: -{total_price} 🍪 | HP Gain: +{heal_amount} | "
+            f"HP: [{hp_bar(target['hp'])}] [{target['hp']}]"
         )
     else:
         await reply(
-            f"@{username} Fed {target['username']} | "
-            f"Change: -{total_price} 🍪 (you), +{amount} ❤️ ({target['username']}) | "
-            f"{target['username']}'s HP: ❤️ {target['hp']}"
+            f"@{username} Healed {target['username']} | "
+            f"Change: -{total_price} 🍪 (you) | Heal amount: +{heal_amount} | "
+            f"{target['username']}'s HP: [{hp_bar(target['hp'])}] [{target['hp']}]"
         )
 

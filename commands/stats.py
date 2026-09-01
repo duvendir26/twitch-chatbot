@@ -3,7 +3,7 @@ import time
 from utils.stocks import load_stocks
 from utils.users import find_user, hp_bar, load_users, reply_if_not_registered, respawn_remaining
 from utils.duration import format_duration
-from utils.xp import get_kek_multiplier, get_level
+from utils.xp import get_kek_bonus, get_level, get_xp_progress
 from commands.bonus import COOLDOWN_TIME
 from config import COMMAND_PREFIX       
 
@@ -63,29 +63,29 @@ async def cmd_stats(username, reply, args=None):
     blocks_display = hp_bar(user["hp"])
 
     level = get_level(user.get("xp", 0))
-    multiplier = get_kek_multiplier(level)
-
+    bonus = get_kek_bonus(level)
+    xp_progress, xp_needed = get_xp_progress(user.get("xp", 0))
+    xp_bar_display = hp_bar(xp_progress, max_hp=xp_needed, width=10) if xp_needed else "█" * 10
+    xp_text = f"{xp_progress}/{xp_needed} XP" if xp_needed else f"{user.get('xp', 0)} XP (MAX)"
+    
+    stocks = load_stocks()
     stats_message = (
         f"@{username} [ "
-        f"HP: {blocks_display} [{user['hp']}] | "
+        f"HP: {blocks_display} [{user['hp']}/100] | "
         f"{respawn_text}"
-        f"Level: {level} ({user.get('xp', 0)} xp, {multiplier:.2f}x keks) | "
+        f"XP: {xp_bar_display} [{xp_text}] | "
+        f"Level: {level} / 30 (+{bonus} keks) | "
         f"Duel wins: {user['duel_wins']} | "
         f"Duel losses: {user['duel_losses']} | "
         f"Balance: {user['balance']} 🍪 | "
         f"{bonus_timer} | "
         f"{steal_timer} | "
-        f"Total claimed: {user['total_claimed']} 🍪"
-    )
-    
-    stocks = load_stocks()
-    stats_message2 = (
-        f"@{username} "
-        f"{biggest_win}"
-        f"{biggest_loss}"
+        f"Total claimed: {user['total_claimed']} 🍪 | "
         f"Coinflip winrate: {user['coinflip_wins'] / (user['coinflip_wins'] + user['coinflip_losses']) * 100 if (user['coinflip_wins'] + user['coinflip_losses']) > 0 else 0:.2f}% | "
         f"Portfolio: {', '.join([f'{item['name']}: {item['amount']} shares' for item in user['portfolio']])}"
     )
+    
+
+
 
     await reply(stats_message)
-    await reply(stats_message2)

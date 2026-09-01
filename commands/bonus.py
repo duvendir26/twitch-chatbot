@@ -56,14 +56,16 @@ async def cmd_bonus(username, reply, args=None):
 
     # Level-based kek multiplier only boosts what you gain, not what you lose
     reward = apply_kek_multiplier(user, amount)
+    multiplier_bonus = reward - amount
 
     if roll < 0.05:
         await reply(
             f"@{username} {random.choice(messagesZero)} | Change: +0 🍪 | Balance: {user['balance']} 🍪"
         )
     elif roll < GAIN_CHANCE:
+        bonus_text = f" (+{multiplier_bonus} from level multiplier)" if multiplier_bonus > 0 else ""
         await reply(
-            f"@{username} {random.choice(messagesGain)} | Change: +{reward} 🍪 | Balance: {user['balance'] + reward} 🍪"
+            f"@{username} {random.choice(messagesGain)} | Change: +{reward} 🍪{bonus_text} | Balance: {user['balance'] + reward} 🍪"
         )
     else:
         message = random.choice(messagesLose)
