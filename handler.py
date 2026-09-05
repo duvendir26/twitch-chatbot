@@ -14,7 +14,7 @@ from commands.hp import cmd_hp
 from commands.xp import cmd_xp
 from commands.convert import cmd_convert
 from commands.duel import cmd_duel, cmd_accept
-from commands.loan import cmd_loan, cmd_repay, cmd_collect, cmd_loans
+from commands.loan import cmd_accept_loan, cmd_loan
 from commands.graveyard import cmd_graveyard
 from commands.resurrect import cmd_resurrect
 
@@ -75,9 +75,7 @@ COMMANDS = {
     "res": cmd_resurrect,
     # ---------------------------
     # "loan": cmd_loan,
-    # "repay": cmd_repay,
-    # "collect": cmd_collect,
-    # "loans": cmd_loans,
+    # "acceptloan": cmd_accept_loan,
 }
 
 

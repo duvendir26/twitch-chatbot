@@ -14,7 +14,8 @@ from utils.xp import add_xp, get_level
 
 ACTIVE_TIME_LIMIT = 15 * 60
 DUEL_REQUEST_TIMEOUT = 30
-DUEL_XP_REWARD = 50
+DUEL_XP_PERCENT = 0.15
+DUEL_LOSER_XP_PERCENT = 0.5
 
 # Small edge for the higher-level fighter, capped so it never gets too unbalanced
 WIN_CHANCE_PER_LEVEL = 0.015
@@ -232,7 +233,6 @@ async def _resolve_duel(challenger, opponent, amount, reply):
     winner["duel_wins"] += 1
     loser["duel_losses"] += 1
 
-    gained_xp = add_xp(winner, DUEL_XP_REWARD)
     bonus_text = f" (+{bonus_damage} from level advantage)" if bonus_damage > 0 else ""
 
     if loser["hp"] <= 0:
@@ -244,22 +244,27 @@ async def _resolve_duel(challenger, opponent, amount, reply):
         loser["death_time"] = current_time
 
         winner["balance"] += dropped_keks
-
-        set_user(challenger["username"], challenger)
-        set_user(opponent["username"], opponent)
-
-        await reply(
-            f"@{winner['username']} wins the duel dealing {damage} damage{bonus_text} to {loser['username']}, "
-            f"killing them KEK7 | Change: +{dropped_keks} 🍪 | XP Gain: +{gained_xp} XP"
-        )
+        keks_won = dropped_keks
     else:
         winner["balance"] += amount
         loser["balance"] -= amount
+        keks_won = amount
 
-        set_user(challenger["username"], challenger)
-        set_user(opponent["username"], opponent)
+    xp_reward = round(keks_won * DUEL_XP_PERCENT)
+    loser_xp_reward = round(xp_reward * DUEL_LOSER_XP_PERCENT)
+    gained_xp = add_xp(winner, xp_reward)
+    add_xp(loser, loser_xp_reward)
 
+    set_user(challenger["username"], challenger)
+    set_user(opponent["username"], opponent)
+
+    if loser["hp"] <= 0:
+        await reply(
+            f"@{winner['username']} wins the duel dealing {damage} damage{bonus_text} to {loser['username']}, "
+            f"killing them KEK7 | Change: +{keks_won} 🍪 | XP Gain: +{gained_xp} XP"
+        )
+    else:
         await reply(
             f"@{winner['username']} wins the duel dealing {damage} damage{bonus_text} to {loser['username']} "
-            f"| Change: +{amount} 🍪 KEKShook | XP Gain: +{gained_xp} XP"
+            f"| Change: +{keks_won} 🍪 KEKShook | XP Gain: +{gained_xp} XP"
         )
