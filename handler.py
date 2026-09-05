@@ -17,6 +17,7 @@ from commands.duel import cmd_duel, cmd_accept
 from commands.loan import cmd_accept_loan, cmd_loan
 from commands.graveyard import cmd_graveyard
 from commands.resurrect import cmd_resurrect
+from commands.duellists import cmd_duellists
 
 from config import COMMAND_PREFIX
 from utils.users import update_last_seen, users_lock
@@ -69,6 +70,8 @@ COMMANDS = {
     # ---------------------------
     "duel": cmd_duel,
     "accept": cmd_accept,
+    "duellists": cmd_duellists,
+    "duelists": cmd_duellists, #? ALIAS
     # ---------------------------
     "graveyard": cmd_graveyard,
     # ---------------------------
