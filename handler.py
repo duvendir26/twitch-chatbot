@@ -4,6 +4,7 @@ from commands.bonus import cmd_bonus
 from commands.coinflip import cmd_coinflip
 from commands.leaderboard import cmd_leaderboard
 from commands.bottom import cmd_bottom
+from commands.playlist import cmd_playlist
 from commands.stats import cmd_stats
 from commands.commandList import cmd_command_list
 from commands.send import cmd_send
@@ -76,6 +77,10 @@ COMMANDS = {
     "graveyard": cmd_graveyard,
     # ---------------------------
     "res": cmd_resurrect,
+    # ---------------------------
+    "playlist": cmd_playlist,
+    "list": cmd_playlist, #? ALIAS
+    "schedule": cmd_playlist, #? ALIAS
     # ---------------------------
     # "loan": cmd_loan,
     # "acceptloan": cmd_accept_loan,
