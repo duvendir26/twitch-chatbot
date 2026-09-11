@@ -19,6 +19,7 @@ from commands.loan import cmd_accept_loan, cmd_loan
 from commands.graveyard import cmd_graveyard
 from commands.resurrect import cmd_resurrect
 from commands.duellists import cmd_duellists
+from commands.rank import cmd_rank
 
 from config import COMMAND_PREFIX
 from utils.users import update_last_seen, users_lock
@@ -66,6 +67,8 @@ COMMANDS = {
     # ---------------------------
     "xp": cmd_xp,
     "level": cmd_xp, #? ALIAS
+    "rank": cmd_rank,
+    "ranks": cmd_rank, #? ALIAS
     # ---------------------------
     "convert": cmd_convert,
     # ---------------------------
@@ -78,12 +81,10 @@ COMMANDS = {
     # ---------------------------
     "res": cmd_resurrect,
     # ---------------------------
-    "playlist": cmd_playlist,
-    "list": cmd_playlist, #? ALIAS
-    "schedule": cmd_playlist, #? ALIAS
+    # "playlist": cmd_playlist,
+    # "list": cmd_playlist, #? ALIAS
+    # "schedule": cmd_playlist, #? ALIAS
     # ---------------------------
-    # "loan": cmd_loan,
-    # "acceptloan": cmd_accept_loan,
 }
 
 

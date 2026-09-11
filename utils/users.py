@@ -90,22 +90,18 @@ def update_last_seen(username, timestamp):
 
 
 def find_user(users, username):
-    """Case-insensitive lookup of a user dict by username in a list of users."""
     return find_by_name(users, username, key="username")
 
 
 def get_user_by_name(username, users=None):
-    """Find a user by username (case-insensitive), loading users if not supplied."""
     return find_user(users if users is not None else load_users(), username)
 
 
 def respawn_remaining(user):
-    """Seconds remaining until `user` respawns (0 if already alive)."""
     return max(0, user["death_time"] + USER_RESPAWN_TIME - time())
 
 
 async def reply_if_dead(reply, viewer, user, *, is_self=False):
-    """Reply with a death/respawn message if `user` is dead. Returns True if dead."""
     if user["hp"] > 0:
         return False
 
@@ -125,7 +121,6 @@ async def reply_if_dead(reply, viewer, user, *, is_self=False):
 
 
 async def reply_if_not_registered(reply, viewer, user, *, target=None, message=None):
-    """Reply with a registration prompt if `user` is None. Returns True if not registered."""
     if user is not None:
         return False
 
@@ -146,7 +141,6 @@ async def reply_if_not_registered(reply, viewer, user, *, target=None, message=N
 
 
 def hp_bar(hp, max_hp=100, width=10):
-    """Render an hp bar of `width` blocks, rounding down at exact half-block values."""
     step = max_hp // width
     offset = step // 2 - 1
     filled = max(0, min(width, (hp + offset) // step))
@@ -155,7 +149,6 @@ def hp_bar(hp, max_hp=100, width=10):
 
 
 def xp_bar(xp, width=10):
-    """Render an xp progress bar toward next level, or full bar if maxed."""
     from utils.xp import get_xp_progress
     progress, needed = get_xp_progress(xp)
     
