@@ -45,12 +45,18 @@ $xp <user (optional)> (alias: $level)
   Show your or another player's XP bar.
 
 $convert <xp amount|all>
-  Convert XP into keks (10 xp = 1 kek).
+  Convert XP into keks. 1 = 1 conversion. One way only.
 
 $stats <user (optional)> (alias: $keks)
 
 $leaderboard (aliases: $top, $kekkers)
   10 richest players.
+
+$rank (alias: $ranks)
+  10 players with highest level.
+
+$duellists (alias: $duelists)
+  List the top 10 duellists (number of wins and winrate)
 
 $bottom
   10 poorest players.
